@@ -9,7 +9,7 @@ body {
 
 a {
   color: inherit;
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
 .btn:hover, .btn:active, .btn:focus {
@@ -18,8 +18,12 @@ a {
 }
 
 .nav-is-active {
-  color: @light-royal-blue!important;
+  color: @light-royal-blue !important;
   border-bottom: 2px solid @light-royal-blue;
+}
+
+.side-nav-is-active {
+  color: @light-royal-blue !important;
 }
 
 .p-v-center {

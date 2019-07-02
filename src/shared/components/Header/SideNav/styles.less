@@ -1,12 +1,17 @@
-@import "../../../../styles/colors";
+@import "~Root/styles/colors";
 
 :local(.toggle) {
   position: absolute;
-  top: 6px;
-  right: 5px;
+  top: 16px;
+  left: 20px;
   @media (min-width: 768px) and (max-width: 992px) {
-    right: 55px;
-    top: 16px;
+    left: 40px;
+    top: 17px;
+  }
+
+  .icon-menu {
+    color: @orange;
+    font-size: 30px;
   }
 }
 
@@ -18,7 +23,7 @@
   }
 
   ul > li > a, ul > li {
-    color: white !important;
+    color: @light-gray;
     font-size: 16px;
     cursor: pointer;
   }
@@ -32,25 +37,21 @@
   }
 }
 
-:local(.main_net) {
-  padding: 80px 80px 20px 20px;
-}
-
 :local(.close_btn) {
   background-color: transparent;
   border: none;
   float: right;
-  margin-top: 13px;
-  margin-right: 13px;
   color: white;
   font-size: 17px;
+
+  .icon-remove {
+    font-size: 20px;
+    color: @orange;
+  }
 }
 
-:local(.close_btn):focus, :local(.close_btn):active, :local(.close_btn):hover {
-  border: none;
-  outline: none;
+:local(.close_btn):focus, :local(.close_btn):active {
   box-shadow: 0 0 0 0;
-  color: white;
 }
 
 :local(.toggle_list) {
@@ -58,4 +59,37 @@
     font-size: 15px !important;
     color: @light-gray !important;
   }
+}
+
+
+:local(.trx) {
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+}
+
+:local(.balance) {
+  font-size: 10px;
+  color: @light-gray;
+}
+
+:local(.address-title) {
+  font-size: 14px;
+  font-weight: 500;
+  color: @light-gray;
+}
+
+:local(.copy) {
+  font-size: 14px;
+  color: white;
+}
+
+:local(.icon-copy) {
+  color: @light-gray;
+}
+
+:local(.adddress-box) {
+  position: absolute;
+  bottom: 0;
+  padding-bottom: 20px;
 }

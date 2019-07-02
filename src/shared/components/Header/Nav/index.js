@@ -3,6 +3,7 @@ import {Link, NavLink} from 'react-router-dom';
 import classNames from 'classnames';
 import styles from './styles.less';
 import {homePage} from 'Root/constants/routes';
+import NavButton from 'Root/shared/components/Header/NavButton';
 
 const Nav = () => (
     <Fragment>
@@ -23,19 +24,20 @@ const Nav = () => (
                    to="/test">My Requests</NavLink>
         </li>
         <li className={classNames(styles['nav-item-btn'], 'nav-item')}>
-          <button className={classNames(styles['nav-link-btn'], 'btn')}>
-            <Link className="nav-link"
-                  to="/test">
-              <span className="icon-plus pr-2" />
-              <span>Create request</span>
-            </Link>
-          </button>
+          <NavButton/>
         </li>
         <li className="nav-item">
-          <div className={classNames(styles.address)}>
+          <div className={classNames(styles.address, styles['show-text'])}>
             <span className={styles['address-title']}>Address : </span>
             <span className={classNames(styles.copy, 'pl-2')}>
               TJWzn8rjLYbfS3hcAVVscLeERUs6rfMoA5
+             <span className="icon-copy pl-3"/>
+            </span>
+          </div>
+          <div className={classNames(styles.address, styles['hide-text'])}>
+            <span className={styles['address-title']}>Address : </span>
+            <span className={classNames(styles.copy, 'pl-2')}>
+              TJWzn8rjLYb...
              <span className="icon-copy pl-3"/>
             </span>
           </div>
