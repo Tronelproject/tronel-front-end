@@ -1,0 +1,32 @@
+@import "../../../styles/colors";
+
+:local(.nav) {
+  background-color: @secondary-dark;
+  padding-left: 68px !important;
+  padding-right: 68px !important;
+  @media (max-width: 1245px) {
+    padding-left: 40px !important;
+    padding-right: 40px !important;
+  }
+}
+
+:local(.trx) {
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+}
+
+:local(.balance) {
+  font-size: 10px;
+  color: @light-gray;
+}
+
+:local(.balance-box) {
+  padding-top: 20px;
+  padding-bottom: 10px;
+  padding-left: 63px;
+  border-left: 1.5px solid @dark-gray;
+  @media (max-width: 1245px) {
+    padding-left: 40px;
+  }
+}

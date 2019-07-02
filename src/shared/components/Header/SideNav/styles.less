@@ -1,0 +1,61 @@
+@import "../../../../styles/colors";
+
+:local(.toggle) {
+  position: absolute;
+  top: 6px;
+  right: 5px;
+  @media (min-width: 768px) and (max-width: 992px) {
+    right: 55px;
+    top: 16px;
+  }
+}
+
+:local(.sidebar) {
+  display: block;
+
+  ul > li {
+    background: transparent !important;
+  }
+
+  ul > li > a, ul > li {
+    color: white !important;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  div:first-child {
+    //height: 100vh;
+  }
+
+  @media (min-width: 992px) {
+    display: none;
+  }
+}
+
+:local(.main_net) {
+  padding: 80px 80px 20px 20px;
+}
+
+:local(.close_btn) {
+  background-color: transparent;
+  border: none;
+  float: right;
+  margin-top: 13px;
+  margin-right: 13px;
+  color: white;
+  font-size: 17px;
+}
+
+:local(.close_btn):focus, :local(.close_btn):active, :local(.close_btn):hover {
+  border: none;
+  outline: none;
+  box-shadow: 0 0 0 0;
+  color: white;
+}
+
+:local(.toggle_list) {
+  ul > li > a {
+    font-size: 15px !important;
+    color: @light-gray !important;
+  }
+}

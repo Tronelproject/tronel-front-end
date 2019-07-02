@@ -1,0 +1,77 @@
+@import "../../../../styles/colors";
+
+:local(.navbar-nav) {
+  li > a {
+    font-size: 16px;
+    color: @light-gray;
+    padding: 30px 25px 30px 25px !important;
+    @media (max-width: 1300px) {
+      padding: 30px 15px 30px 15px !important;
+    }
+  }
+
+  li:first-child {
+    padding-left: 130px;
+    @media (max-width: 1430px) {
+      padding-left: 0;
+    }
+  }
+
+  li:last-child {
+    padding-top: 26px;
+    padding-left: 18px;
+  }
+
+  :local(.nav-item-btn) {
+    padding-top: 26px;
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+
+  li > :local(.nav-link-btn) {
+    border-radius: 18px;
+    background-color: @light-royal-blue;
+    padding: 0;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+
+    .nav-link {
+      padding: 7px 15px 7px 13px !important;
+
+      .icon-plus {
+        font-size: 16px;
+      }
+    }
+  }
+
+  li > :local(.nav-link-btn):hover {
+    .nav-link {
+      color: white;
+    }
+  }
+
+}
+
+:local(.address) {
+  width: 100%;
+  background-color: @primary-charocal-gray;
+  border-radius: 18px;
+  padding: 5px 24px 5px 24px;
+}
+
+:local(.address-title) {
+  font-size: 14px;
+  font-weight: 500;
+  color: @light-gray;
+}
+
+:local(.copy) {
+  font-size: 14px;
+  color: white;
+
+  .icon-copy {
+    color: @light-gray;
+  }
+}
