@@ -6,12 +6,14 @@ import styles from './styles.less';
 import diamonds from 'Root/assets/images/diamonds.png';
 import logo from 'Root/assets/images/tronel-white.png';
 import NavButton from 'Root/shared/components/Header/NavButton';
+import CopyText from 'Root/shared/components/CopyText';
 
 class SideNav extends Component {
   state = {
     sidebarOpen: false,
     collapse: true,
     rotate: false,
+    address: 'TJWzn8rjLYbfS3hcAVVscLeERUs6rfMoA5',
   };
 
   onSetSidebarOpen = (open) => {
@@ -84,20 +86,20 @@ class SideNav extends Component {
                         <NavButton/>
                       </li>
                     </ul>
-                    <div className={classNames(styles['adddress-box'], 'container-fluid')}>
+                    <div className={classNames(styles['adddress-box'],
+                        'container-fluid')}>
                       <div className="row">
                         <div className="col-6 text-light">
                           <h6 className={styles['address-title']}>Address:</h6>
                         </div>
                         <div className="col-6 text-right">
-                          <span
-                              className={classNames(styles['icon-copy'], 'icon-copy')}/>
+                          <CopyText text={this.state.address}/>
                         </div>
                       </div>
                       <div className="row mt-1">
                         <div className="col-12">
                           <h6 className={classNames(styles.copy)}>
-                            TJWzn8rjLYbfS3hcAVVscLeERUs6rfMoA5
+                            {this.state.address}
                           </h6>
                         </div>
                       </div>

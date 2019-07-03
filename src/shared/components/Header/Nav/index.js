@@ -4,6 +4,10 @@ import classNames from 'classnames';
 import styles from './styles.less';
 import {homePage} from 'Root/constants/routes';
 import NavButton from 'Root/shared/components/Header/NavButton';
+import CopyText from 'Root/shared/components/CopyText';
+import shorter from 'Root/helpers/shorter';
+
+const address = 'TJWzn8rjLYbfS3hcAVVscLeERUs6rfMoA5';
 
 const Nav = () => (
     <Fragment>
@@ -27,18 +31,23 @@ const Nav = () => (
           <NavButton/>
         </li>
         <li className="nav-item">
-          <div className={classNames(styles.address, styles['show-text'])}>
+          <div className={classNames(styles.address,
+              styles['show-text'])}>
             <span className={styles['address-title']}>Address : </span>
             <span className={classNames(styles.copy, 'pl-2')}>
-              TJWzn8rjLYbfS3hcAVVscLeERUs6rfMoA5
-             <span className="icon-copy pl-3"/>
+              {address}
+              <span className="pl-3">
+                <CopyText text={address}/>
+              </span>
             </span>
           </div>
           <div className={classNames(styles.address, styles['hide-text'])}>
             <span className={styles['address-title']}>Address : </span>
             <span className={classNames(styles.copy, 'pl-2')}>
-              TJWzn8rjLYb...
-             <span className="icon-copy pl-3"/>
+              {shorter(address)}
+              <span className="pl-3">
+                <CopyText text={address}/>
+              </span>
             </span>
           </div>
         </li>
