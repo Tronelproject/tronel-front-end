@@ -26,9 +26,9 @@ function Dropdowns(props) {
               animation="slide-up"
               onVisibleChange={onVisibleChange}
           >
-            <button style={{ width: `${width}px`}} type="button" className={styles.dropdownButton}>
+            <button type="button" className={styles.dropdownButton}>
               {title}
-              {/*<img src={arrowdownIcon} alt="arrow-down" />*/}
+             <span className="icon-angle-down" />
             </button>
           </Dropdown>
         </div>

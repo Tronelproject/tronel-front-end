@@ -55,6 +55,14 @@ a {
 
 .body-padding {
   padding: 47px 53px;
+  @media (max-width: 1438px) {
+    padding-right: 35px;
+    padding-left: 35px;
+  }
+  @media (max-width: 990px) {
+    padding-right: 18px;
+    padding-left: 18px;
+  }
 }
 
 .layout-btn, .layout-btn:hover {
@@ -83,10 +91,102 @@ a {
 }
 
 .rc-dropdown-menu-item-selected {
-  background: #343844 !important;
+  background: @dark-charocal-gray !important;
 }
 
 .rc-dropdown-menu > .rc-dropdown-menu-item-selected:after {
   display: none !important;
 }
 
+.rc-dropdown {
+  //min-width: 100% !important;
+}
+
+.form-control:focus {
+  box-shadow: 0 0 0 0 !important;
+}
+
+.simple-form, .simple-form:hover {
+  border-radius: 5px;
+  background-color: @dark-charocal-gray;
+  border: 1px solid @dark-charocal-gray;
+  font-size: 14px;
+  color: @brownish-grey;
+  padding-top: 19px;
+  padding-bottom: 19px;
+  transition: 0.3s ease-in;
+}
+
+.simple-form:focus {
+  background-color: @dark-charocal-gray;
+  border: 1px solid @dark-charocal-gray;
+}
+
+.simple-form::-webkit-input-placeholder {
+  color: @brownish-grey;
+}
+
+.simple-btn {
+  border-radius: 5px;
+  color: white;
+  background-color: @dark-charocal-gray;
+  padding-right: 23px;
+  padding-left: 23px;
+  font-size: 16px;
+  font-weight: 500;
+  @media (max-width: 600px) {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+}
+
+.simple-btn:focus {
+  box-shadow: 0 0 0 0;
+}
+
+.simple-btn:hover {
+  color: white;
+  background: rgba(52, 56, 68, 0.5);
+}
+
+.list-padding {
+  padding: 0 16px;
+}
+
+.info-list {
+  ul > li {
+    background-color: transparent !important;
+    border: 1px solid @secondary-light-gray;
+    padding-top: 28px;
+    padding-bottom: 28px;
+  }
+
+  ul > li:first-child {
+    border-top: 0 !important;
+  }
+
+  ul > li:last-child {
+    border-bottom: 0 !important;
+  }
+
+  .info-list-text {
+    font-size: 16px;
+    font-weight: 500;
+    text-align: right;
+    color: white;
+  }
+
+  .info-list-text-suffix {
+    color: @light-gray;
+    font-size: 13px !important;
+  }
+
+  .block-complete-info {
+    font-size: 14px;
+    line-height: 1.43;
+    color: @light-gray;
+    border-radius: 4px;
+    background-color: @dark-charocal-gray;
+    padding: 12px;
+  }
+}

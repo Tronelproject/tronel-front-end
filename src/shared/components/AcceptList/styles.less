@@ -1,0 +1,36 @@
+@import "~Root/styles/colors";
+
+:local(.copy) {
+  font-size: 16px;
+  font-weight: 500;
+  color: white;
+  text-align: right;
+}
+
+:local(.btn) {
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  background-color: @light-royal-blue !important;
+  color: white!important;
+  margin-bottom: 25px;
+  width: 106px;
+}
+
+:local(.btn):hover {
+  color: white;
+}
+
+:local(.address) {
+  display: block;
+  @media (max-width: 1470px) {
+    display: none;
+  }
+}
+
+:local(.small-address) {
+  display: none;
+  @media (max-width: 1470px) {
+    display: block;
+  }
+}

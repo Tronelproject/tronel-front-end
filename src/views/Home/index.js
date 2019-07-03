@@ -1,9 +1,12 @@
 import React, {Fragment, Component} from 'react';
-import Menu, { Item as MenuItem, Divider } from 'rc-menu';
-import Slider, { createSliderWithTooltip } from 'rc-slider';
+import Menu, {Item as MenuItem, Divider} from 'rc-menu';
+import Slider, {createSliderWithTooltip} from 'rc-slider';
 import Header from 'Root/shared/components/Header';
 import PageTitle from 'Root/shared/components/PageTitle';
 import DropDown from 'Root/shared/components/Dropdown';
+import AcceptList from 'Root/shared/components/AcceptList';
+import binanceCoin from 'Root/assets/images/binance-coin-logo.png';
+import bitCoin from 'Root/assets/images/bitcoin.png';
 import styles from './styles.less';
 
 const Range = createSliderWithTooltip(Slider.Range);
@@ -30,7 +33,7 @@ class Home extends Component {
     return this.state.vertically;
   };
 
-  handleSelect = ({ key }) => {
+  handleSelect = ({key}) => {
     this.setState({
       title: key,
     });
@@ -64,7 +67,7 @@ class Home extends Component {
           <Header/>
           <div className="container-fluid">
             <div className="row justify-content-center">
-              <div className="col-9 body-padding">
+              <div className="col-xl-9 col-lg-11 col-md-11 col-sm-11 col-11 body-padding">
                 <PageTitle
                     title="Explorer"
                     h={this.state.horizontally}
@@ -72,25 +75,26 @@ class Home extends Component {
                     horizontallyHandler={this.showHorizontally}
                     verticallyHandler={this.showVertically}/>
                 <div className="row mt-3">
-                  <div className="col-3">
+                  <div className="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6
+                                  pr-xl-1 pr-lg-1 pr-md-2 pr-sm-2 pr-2">
                     <div className="card block-padding">
                       <h6 className="block-title">
                         Currency
                       </h6>
-                      <DropDown menu={menu} title={this.state.title}
-                                width="152"/>
+                      <DropDown menu={menu} title={this.state.title}/>
                     </div>
                   </div>
-                  <div className="col-4">
+                  <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-6
+                                  px-xl-1 px-lg-1 pl-md-2 pl-sm-2 pl-2">
                     <div className="card block-padding">
-                      <h6 className="block-title">
+                      <h6 className="block-title pb-2">
                         Amount of bet
                       </h6>
                       <Range onChange={range}
-                             min= {0}
-                             max= {1000}
-                             defaultValue={[200,500]}
-                             railStyle={{ background:'#b2b4b7'}}
+                             min={0}
+                             max={1000}
+                             defaultValue={[200, 500]}
+                             railStyle={{background: '#b2b4b7'}}
                              className={styles.range}
                              tipFormatter={value => `${value} TRX`}
                              tipProps={{
@@ -98,6 +102,56 @@ class Home extends Component {
                                placement: 'bottom',
                              }}
                       />
+                    </div>
+                  </div>
+                  <div className="col-xl-5 col-lg-5 col-md-12 col-sm-12 col-12
+                                  pl-xl-1 pl-lg-1
+                                  mt-xl-auto mt-lg-auto mt-md-3 mt-sm-3 mt-3">
+                    <div className="card block-padding">
+                      <h6 className="block-title">Form number</h6>
+                      <div className="row">
+                        <div className="col-xl-8 col-lg-8 col-md-9 col-sm-9 col-9 pr-0">
+                          <input className="form-control simple-form" pattern="[A-Za-z]"
+                                 type="text" placeholder="Enter your form number"/>
+                        </div>
+                        <div className="col-3 text-right">
+                          <button className="btn simple-btn">Search</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="row mt-5">
+                  <div className="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12
+                                   mt-xl-auto mt-lg-auto mt-md-3 mt-sm-3 mt-3">
+                    <div className="pr-xl-4 pr-lg-4">
+                      <AcceptList
+                          contractHash="UjEA674fdDe714fd979de3EdF3e6hd"
+                          Requester="WTEA674fdDe714fd979de3EdF6A8udk"
+                          Cryptocurrency={binanceCoin}
+                          width="33px"
+                          height="33px"
+                          predictedPrice="Greater than or equal $30"
+                          amountOfBets="500"
+                          date="2019/05/12"
+                          utc="12:00 UTC"
+                      />
+                    </div>
+                  </div>
+                  <div className="col-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12
+                                  mt-xl-auto mt-lg-auto mt-md-3 mt-sm-3 mt-3">
+                    <div className="pl-xl-4 pl-lg-4">
+                    <AcceptList
+                        contractHash="UjEA674fdDe714fd979de3EdF3e6hd"
+                        Requester="WTEA674fdDe714fd979de3EdF6A8udk"
+                        Cryptocurrency={bitCoin}
+                        width="33px"
+                        height="33px"
+                        predictedPrice="Lower than or equal  6000$"
+                        amountOfBets="100"
+                        date="2019/06/12"
+                        utc="10:00 UTC"
+                    />
                     </div>
                   </div>
                 </div>
