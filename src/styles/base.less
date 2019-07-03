@@ -4,7 +4,7 @@
 
 body {
   font-family: Roboto-Regular !important;
-  background-color: antiquewhite;
+  background-color: @primary-dark;
 }
 
 a {
@@ -22,7 +22,7 @@ a {
   border-bottom: 2px solid @light-royal-blue;
 }
 
-.side-nav-is-active {
+.side-nav-is-active, .active-layout {
   color: @light-royal-blue !important;
 }
 
@@ -45,5 +45,48 @@ a {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.page-title {
+  font-weight: 300;
+  color: white;
+  font-size: 30px;
+}
+
+.body-padding {
+  padding: 47px 53px;
+}
+
+.layout-btn, .layout-btn:hover {
+  color: @light-gray;
+}
+
+.card {
+  background-color: @primary-charocal-gray;
+  border-radius: 4px;
+  height: 100%;
+}
+
+.block-title {
+  font-size: 16px;
+  color: @light-gray;
+  font-weight: 500;
+}
+
+.block-tile-lighter {
+  font-size: 16px;
+  color: @light-gray;
+}
+
+.block-padding {
+  padding: 34px 20px 34px 20px;
+}
+
+.rc-dropdown-menu-item-selected {
+  background: #343844 !important;
+}
+
+.rc-dropdown-menu > .rc-dropdown-menu-item-selected:after {
+  display: none !important;
 }
 
