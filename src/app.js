@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import React from 'react';
 import { render } from 'react-dom';
 import loadBets from 'Root/actions/bets/load';
@@ -18,9 +19,14 @@ import App from './views';
   } else {
     const bets = await getBets();
 
-    loadBets(bets);
-    loadMyBets(bets);
-    loadMyRequests(bets);
+    if (!bets) {
+      // server error;
+      return;
+    }
+
+    loadBets(bets.data);
+    loadMyBets(bets.data);
+    loadMyRequests(bets.data);
   }
 })();
 

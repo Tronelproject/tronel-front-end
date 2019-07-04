@@ -1,3 +1,3 @@
 import fetch from './fetch';
 
-export default fetch('/bets');
+export default () => fetch('/bets');
