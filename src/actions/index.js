@@ -7,5 +7,6 @@ export default {
   },
   myrequests: {
     LOAD: 'myrequests/LOAD',
+    ADD: 'myrequests/ADD',
   },
 };
