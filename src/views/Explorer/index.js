@@ -15,7 +15,7 @@ function range(e) {
   console.log(e);
 }
 
-class Home extends Component {
+class Explorer extends Component {
 
   state = {
     horizontally: false,
@@ -25,12 +25,10 @@ class Home extends Component {
 
   showHorizontally = () => {
     this.setState({vertically: false, horizontally: true});
-    return this.state.horizontally;
   };
 
   showVertically = () => {
     this.setState({vertically: true, horizontally: false});
-    return this.state.vertically;
   };
 
   handleSelect = ({key}) => {
@@ -40,15 +38,23 @@ class Home extends Component {
   };
 
   render() {
-    let horizontallyPart = null;
-    let verticallyPart = null;
+    let rightCol = null;
+    let rightColDiv = null;
+    let leftCol = null;
+    let leftColDiv = null;
 
     if (this.state.horizontally) {
-      horizontallyPart = (<h1>horizontallyPart</h1>);
+      rightCol = 'col-12';
+      rightColDiv = '';
+      leftCol = 'col-12 mt-4';
+      leftColDiv = '';
     }
 
     if (this.state.vertically) {
-      verticallyPart = (<h1>verticallyPartPart</h1>);
+      rightCol = 'col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mt-xl-auto mt-lg-auto mt-md-0 mt-sm-0 mt-0';
+      rightColDiv = 'pr-xl-4 pr-lg-4';
+      leftCol = 'col-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mt-xl-auto mt-lg-auto mt-md-3 mt-sm-3 mt-3';
+      leftColDiv = 'pl-xl-4 pl-lg-4';
     }
 
     const menu = (
@@ -67,14 +73,15 @@ class Home extends Component {
           <Header/>
           <div className="container-fluid">
             <div className="row justify-content-center">
-              <div className="col-xl-9 col-lg-11 col-md-11 col-sm-11 col-11 body-padding">
+              <div
+                  className="col-xl-9 col-lg-11 col-md-11 col-sm-11 col-11 body-padding">
                 <PageTitle
                     title="Explorer"
                     h={this.state.horizontally}
                     v={this.state.vertically}
                     horizontallyHandler={this.showHorizontally}
                     verticallyHandler={this.showVertically}/>
-                <div className="row mt-3">
+                <div className="row mt-4">
                   <div className="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6
                                   pr-xl-1 pr-lg-1 pr-md-2 pr-sm-2 pr-2">
                     <div className="card block-padding">
@@ -110,9 +117,12 @@ class Home extends Component {
                     <div className="card block-padding">
                       <h6 className="block-title">Form number</h6>
                       <div className="row">
-                        <div className="col-xl-8 col-lg-8 col-md-9 col-sm-9 col-9 pr-0">
-                          <input className="form-control simple-form" pattern="[A-Za-z]"
-                                 type="text" placeholder="Enter your form number"/>
+                        <div
+                            className="col-xl-8 col-lg-8 col-md-9 col-sm-9 col-9 pr-0">
+                          <input className="form-control simple-form"
+                                 pattern="[A-Za-z]"
+                                 type="text"
+                                 placeholder="Enter your form number"/>
                         </div>
                         <div className="col-3 text-right">
                           <button className="btn simple-btn">Search</button>
@@ -122,9 +132,8 @@ class Home extends Component {
                   </div>
                 </div>
                 <div className="row mt-5">
-                  <div className="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12
-                                   mt-xl-auto mt-lg-auto mt-md-3 mt-sm-3 mt-3">
-                    <div className="pr-xl-4 pr-lg-4">
+                  <div className={rightCol}>
+                    <div className={rightColDiv}>
                       <AcceptList
                           contractHash="UjEA674fdDe714fd979de3EdF3e6hd"
                           Requester="WTEA674fdDe714fd979de3EdF6A8udk"
@@ -135,46 +144,43 @@ class Home extends Component {
                           amountOfBets="500"
                           date="2019/05/12"
                           utc="12:00 UTC"
+                          horizontally={this.state.horizontally}
+                          vertically={this.state.vertically}
                       />
                     </div>
                   </div>
-                  <div className="col-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12
-                                  mt-xl-auto mt-lg-auto mt-md-3 mt-sm-3 mt-3">
-                    <div className="pl-xl-4 pl-lg-4">
-                    <AcceptList
-                        contractHash="UjEA674fdDe714fd979de3EdF3e6hd"
-                        Requester="WTEA674fdDe714fd979de3EdF6A8udk"
-                        Cryptocurrency={bitCoin}
-                        width="33px"
-                        height="33px"
-                        predictedPrice="Lower than or equal  6000$"
-                        amountOfBets="100"
-                        date="2019/06/12"
-                        utc="10:00 UTC"
-                    />
+                  <div className={leftCol}>
+                    <div className={leftColDiv}>
+                      <AcceptList
+                          contractHash="UjEA674fdDe714fd979de3EdF3e6hd"
+                          Requester="WTEA674fdDe714fd979de3EdF6A8udk"
+                          Cryptocurrency={bitCoin}
+                          width="33px"
+                          height="33px"
+                          predictedPrice="Lower than or equal  6000$"
+                          amountOfBets="100"
+                          date="2019/06/12"
+                          utc="10:00 UTC"
+                          horizontally={this.state.horizontally}
+                          vertically={this.state.vertically}
+                      />
                     </div>
                   </div>
                 </div>
-                {/*<div className="row">*/}
-                {/*<div className="col-12">*/}
-                {/*{horizontallyPart}*/}
-                {/*{verticallyPart}*/}
-                {/*</div>*/}
-                {/*</div>*/}
               </div>
             </div>
           </div>
           {/*<div className="container-fluid">*/}
-            {/*<div className="row">*/}
-              {/*<div className="col-12 px-0">*/}
-                {/*<img src={require('../../assets/images/design/Explorer.png')}*/}
-                     {/*alt="" width="100%" height="100%"/>*/}
-              {/*</div>*/}
-            {/*</div>*/}
+          {/*<div className="row">*/}
+          {/*<div className="col-12 px-0">*/}
+          {/*<img src={require('../../assets/images/design/Explorer(Horizontal).png')}*/}
+          {/*alt="" width="100%" height="100%"/>*/}
+          {/*</div>*/}
+          {/*</div>*/}
           {/*</div>*/}
         </Fragment>
     );
   }
 }
 
-export default Home;
+export default Explorer;

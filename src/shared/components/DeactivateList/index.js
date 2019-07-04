@@ -1,10 +1,10 @@
-import React, {Fragment, Component} from 'react';
-import CopyText from 'Root/shared/components/CopyText';
-import BasicModal from 'Root/shared/components/Modal';
+import React, {Component, Fragment} from 'react';
 import classNames from 'classnames';
+import CopyText from 'Root/shared/components/CopyText';
+import AlertModal from 'Root/shared/components/AlertModal';
 import styles from './styles.less';
 
-class AcceptList extends Component {
+class DeactivateList extends Component {
   state = {
     modal: false,
   };
@@ -93,7 +93,7 @@ class AcceptList extends Component {
                            py-0 d-xl-block d-lg-block d-md-none d-sm-none d-none">
               <ul className="nav nav-pills">
                 <li className="nav-item">
-                    {predicted}
+                  {predicted}
                 </li>
                 <li className="nav-item nav-space"/>
                 <li className="nav-item">
@@ -205,16 +205,15 @@ class AcceptList extends Component {
               the
               acceptor user in the bet gets 500 TRX and is the winner.
             </p>
-            <button className={classNames(styles.btn, 'btn mt-2')}
-                    onClick={this.toggle}>
-              <span className="icon-checked pr-2"/>
-              Accept
+            <button className={classNames(styles.btn, 'btn mt-2')}  onClick={this.toggle}>
+              <span className="icon-power pr-2"/>
+              Deactive this bet
             </button>
           </div>
-          <BasicModal modal={this.state.modal} toggle={this.toggle}/>
+          <AlertModal modal={this.state.modal} toggle={this.toggle}/>
         </Fragment>
     );
   }
 }
 
-export default AcceptList;
+export default DeactivateList;

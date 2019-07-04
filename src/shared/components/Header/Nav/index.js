@@ -1,8 +1,12 @@
 import React, {Fragment} from 'react';
-import {Link, NavLink} from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 import classNames from 'classnames';
 import styles from './styles.less';
-import {homePage} from 'Root/constants/routes';
+import {
+  explorerRoute,
+  myRequestRoute,
+  myBetRoute,
+} from 'Root/constants/routes';
 import NavButton from 'Root/shared/components/Header/NavButton';
 import CopyText from 'Root/shared/components/CopyText';
 import shorter from 'Root/helpers/shorter';
@@ -15,17 +19,17 @@ const Nav = () => (
         <li className="nav-item">
           <NavLink className="nav-link" exact={true}
                    activeClassName='nav-is-active'
-                   to={homePage}>Explorer</NavLink>
+                   to={explorerRoute}>Explorer</NavLink>
         </li>
         <li className="nav-item">
           <NavLink className="nav-link"
                    activeClassName='nav-is-active'
-                   to="/test">My Bets</NavLink>
+                   to={myBetRoute}>My Bets</NavLink>
         </li>
         <li className="nav-item">
           <NavLink className="nav-link"
                    activeClassName='nav-is-active'
-                   to="/test">My Requests</NavLink>
+                   to={myRequestRoute}>My Requests</NavLink>
         </li>
         <li className={classNames(styles['nav-item-btn'], 'nav-item')}>
           <NavButton/>

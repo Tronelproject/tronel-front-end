@@ -63,6 +63,15 @@ a {
     padding-right: 18px;
     padding-left: 18px;
   }
+  @media (min-width: 1700px) {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+
+  @media (min-width: 1850px) {
+    padding-right: 0;
+    padding-left: 0;
+  }
 }
 
 .layout-btn, .layout-btn:hover {
@@ -161,11 +170,11 @@ a {
     padding-bottom: 28px;
   }
 
-  ul > li:first-child {
+  ul.list-group > li:first-child {
     border-top: 0 !important;
   }
 
-  ul > li:last-child {
+  ul.list-group > li:last-child {
     border-bottom: 0 !important;
   }
 
@@ -189,4 +198,78 @@ a {
     background-color: @dark-charocal-gray;
     padding: 12px;
   }
+
+  .block-type {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.43;
+    border-radius: 4px;
+    background-color: @dark-charocal-gray;
+    padding: 9px;
+  }
+
+  .block-type-lose {
+    color: @faded-red;
+  }
+
+  .block-type-win {
+    color: @nasty-green;
+  }
+
+  ul > li.border-top-less, ul > li.border-bottom-less {
+    border: 1px solid transparent !important;
+  }
+
+  .col-li-border {
+    border-bottom: 1px solid @secondary-light-gray;
+  }
+
+  ul > li > ul.nav > li {
+    border: none;
+    padding: 28px 0;
+  }
+  ul > li > ul.nav > li:first-child {
+    width: 48%;
+  }
+
+  ul > li > ul.nav > li:last-child {
+    width: 48%;
+  }
+
+  ul > li > ul.nav.second-pill > li:last-child {
+    padding-top: 36px!important;
+  }
+
+  ul > li > ul.nav > li.half-border:first-child {
+    border-bottom: 1px solid @secondary-light-gray;
+    width: 48%;
+  }
+
+  ul > li > ul.nav > li.half-border:last-child {
+    border-bottom: 1px solid @secondary-light-gray;
+    width: 48%;
+  }
+
+  ul > li > ul.nav > li.nav-space {
+    width: 4%;
+  }
+}
+
+.modal {
+  text-align: center;
+  padding: 0 !important;
+}
+
+.modal:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  margin-right: -4px;
+}
+
+.modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
 }
