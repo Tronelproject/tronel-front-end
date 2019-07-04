@@ -6,6 +6,13 @@ export default (state = [], action) => {
       return action.bets;
     }
 
+    case types.myrequests.ADD: {
+      return [
+        ...state,
+        action.bet,
+      ];
+    }
+
     default: {
       return state;
     }
