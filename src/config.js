@@ -1,5 +1,5 @@
 const config = {
-  server: '',
+  server: 'http://46.105.148.221:8010/',
 };
 
 // if (process.env.NODE_ENV === 'development') {
