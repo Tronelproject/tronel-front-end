@@ -8,5 +8,6 @@ export default {
   myrequests: {
     LOAD: 'myrequests/LOAD',
     ADD: 'myrequests/ADD',
+    DISABLE: 'myrequests/DISABLE',
   },
 };
