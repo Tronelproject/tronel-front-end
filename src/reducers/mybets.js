@@ -6,6 +6,13 @@ export default (state = [], action) => {
       return action.bets;
     }
 
+    case types.mybets.ACCEPT: {
+      return [
+        ...state,
+        action.bet,
+      ];
+    }
+
     default: {
       return state;
     }
