@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Link, NavLink} from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 import Sidebar from 'react-sidebar';
 import classNames from 'classnames';
 import styles from './styles.less';
@@ -7,6 +7,11 @@ import diamonds from 'Root/assets/images/diamonds.png';
 import logo from 'Root/assets/images/tronel-white.png';
 import NavButton from 'Root/shared/components/Header/NavButton';
 import CopyText from 'Root/shared/components/CopyText';
+import {
+  explorerRoute,
+  myBetRoute,
+  myRequestRoute,
+} from 'Root/constants/routes';
 
 class SideNav extends Component {
   state = {
@@ -62,14 +67,14 @@ class SideNav extends Component {
                         <NavLink
                             exact={true}
                             activeClassName='side-nav-is-active'
-                            to="/">
+                            to={explorerRoute}>
                           {'Explorer'}
                         </NavLink>
                       </li>
                       <li className="list-group-item border-0 pt-3">
                         <NavLink
                             activeClassName='side-nav-is-active'
-                            to="/test"
+                            to={myBetRoute}
                         >
                           {'My Bets'}
                         </NavLink>
@@ -77,7 +82,7 @@ class SideNav extends Component {
                       <li className="list-group-item border-0 pt-3">
                         <NavLink
                             activeClassName='side-nav-is-active'
-                            to="/test"
+                            to={myRequestRoute}
                         >
                           {'My Requests'}
                         </NavLink>

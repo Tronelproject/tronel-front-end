@@ -7,7 +7,7 @@ import styles from './styles.less';
 // import arrowdownIcon from 'Root/images/arrow-down.png';
 
 function onVisibleChange(visible) {
-  console.log(visible);
+  // console.log(visible);
 }
 
 function Dropdowns(props) {

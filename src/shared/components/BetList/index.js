@@ -1,23 +1,14 @@
-import React, {Fragment, Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import moment from 'moment';
 import CopyText from 'Root/shared/components/CopyText';
-import BasicModal from 'Root/shared/components/Modal';
 import binanceCoin from 'Root/assets/images/binance-coin-logo.png';
 import bitCoin from 'Root/assets/images/bitcoin.png';
 import ethereum from 'Root/assets/images/ethereum.png';
 import classNames from 'classnames';
 import styles from './styles.less';
 
-class AcceptList extends Component {
-  state = {
-    modal: false,
-  };
-
-  toggle = () => {
-    this.setState({
-      modal: !this.state.modal,
-    });
-  };
+class BetList extends Component {
+  state = {};
 
   checkImage = (currency) => {
     if (currency === 'bitcoin') {
@@ -32,6 +23,28 @@ class AcceptList extends Component {
   };
 
   render() {
+    let state = null;
+    const won = (
+        <p className="block-type block-type-win text-center mb-4">You Win</p>
+    );
+
+    const lost = (
+        <p className="block-type block-type-lose text-center mb-4">You Lose</p>
+    );
+    if (this.props.list.predictType === 1) {
+      if (this.props.list.submittedPrice >= this.props.list.predictPrice) {
+        state = won;
+      } else {
+        state = lost;
+      }
+    } else {
+      if (this.props.list.submittedPrice < this.props.list.predictPrice) {
+        state = won;
+      } else {
+        state = lost;
+      }
+    }
+
     let newList = null;
     const trx = 1000000;
     const cryptocurrency = (
@@ -55,8 +68,8 @@ class AcceptList extends Component {
               Price :</h6>
           </div>
           <div className="col-8 text-right">
-            <h6 className="info-list-text mb-0">Greater than or equal
-              ${this.props.list.predictPrice}</h6>
+            <h6 className="info-list-text mb-0">Greater than or
+              equal ${this.props.list.predictPrice}</h6>
           </div>
         </div>
     );
@@ -85,8 +98,8 @@ class AcceptList extends Component {
           </div>
           <div className="col-8 text-right">
             <h6 className="info-list-text mb-0">
-              <span className="pr-2">{moment.unix(this.props.list.predictTime).
-                  format('YYYY/MM/DD')}</span>|
+               <span className="pr-2">{moment.unix(this.props.list.predictTime).
+                   format('YYYY/MM/DD')}</span>|
               <span className="pl-2">{moment.unix(this.props.list.predictTime).
                   format('HH:mm')}</span>
             </h6>
@@ -161,6 +174,7 @@ class AcceptList extends Component {
           </Fragment>
       );
     }
+
     return (
         <Fragment>
           <div className="card list-padding info-list">
@@ -216,25 +230,45 @@ class AcceptList extends Component {
                   </div>
                 </div>
               </li>
+              <li className="list-group-item px-0">
+                <div className="row">
+                  <div className="col-4 p-v-center">
+                    <h6 className="block-tile-lighter c-v-center mb-0">Acceptor
+                      :</h6>
+                  </div>
+                  <div className="col-8 text-right">
+                          <span
+                              className={classNames(styles.copy, styles.address,
+                                  'pl-2')}>
+                              {this.props.list.acceptor.slice(0, 21)}...
+                              <span className="pl-3">
+                              <CopyText text={this.props.list.acceptor}/>
+                              </span>
+                          </span>
+                    <span className={classNames(styles.copy,
+                        styles['small-address'], 'pl-2')}>
+                              {this.props.list.acceptor.slice(0, 10)}...
+                              <span className="pl-3">
+                              <CopyText text={this.props.list.acceptor}/>
+                              </span>
+                          </span>
+                  </div>
+                </div>
+              </li>
               {newList}
             </ul>
-            <p className="block-complete-info">
+            <p className="block-complete-info mb-4">
               At the 2019/05/12|12:00 UTC if the BNB price is greater than or
               equal
               30$, the requester user is the winner and gets 500 TRX, otherwise
               the
               acceptor user in the bet gets 500 TRX and is the winner.
             </p>
-            <button className={classNames(styles.btn, 'btn mt-2')}
-                    onClick={this.toggle}>
-              <span className="icon-checked pr-2"/>
-              Accept
-            </button>
+            {state}
           </div>
-          <BasicModal modal={this.state.modal} toggle={this.toggle}/>
         </Fragment>
     );
   }
 }
 
-export default AcceptList;
+export default BetList;

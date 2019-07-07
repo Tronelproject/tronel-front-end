@@ -1,14 +1,14 @@
-import React, {Fragment, Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import moment from 'moment';
+import classNames from 'classnames';
 import CopyText from 'Root/shared/components/CopyText';
-import BasicModal from 'Root/shared/components/Modal';
+import AlertModal from 'Root/shared/components/AlertModal';
 import binanceCoin from 'Root/assets/images/binance-coin-logo.png';
 import bitCoin from 'Root/assets/images/bitcoin.png';
 import ethereum from 'Root/assets/images/ethereum.png';
-import classNames from 'classnames';
 import styles from './styles.less';
 
-class AcceptList extends Component {
+class DeactivateList extends Component {
   state = {
     modal: false,
   };
@@ -31,9 +31,28 @@ class AcceptList extends Component {
     }
   };
 
+  deactivateBet = () => {
+    this.props.list.disabled = true;
+  };
+
   render() {
     let newList = null;
     const trx = 1000000;
+    let listButton = (
+        <button className={classNames(styles.btn, 'btn mt-2')}
+                onClick={this.toggle}>
+          <span className="icon-power pr-2"/>
+          Deactive this bet
+        </button>
+    );
+    if (this.props.list.disabled) {
+      listButton = (
+          <button
+              className={classNames(styles['btn-deactivate'], 'btn mt-2')}>
+            This bet has been deactived
+          </button>
+      );
+    }
     const cryptocurrency = (
         <div className="row">
           <div className="col-4 p-v-center">
@@ -85,8 +104,8 @@ class AcceptList extends Component {
           </div>
           <div className="col-8 text-right">
             <h6 className="info-list-text mb-0">
-              <span className="pr-2">{moment.unix(this.props.list.predictTime).
-                  format('YYYY/MM/DD')}</span>|
+               <span className="pr-2">{moment.unix(this.props.list.predictTime).
+                   format('YYYY/MM/DD')}</span>|
               <span className="pl-2">{moment.unix(this.props.list.predictTime).
                   format('HH:mm')}</span>
             </h6>
@@ -225,16 +244,14 @@ class AcceptList extends Component {
               the
               acceptor user in the bet gets 500 TRX and is the winner.
             </p>
-            <button className={classNames(styles.btn, 'btn mt-2')}
-                    onClick={this.toggle}>
-              <span className="icon-checked pr-2"/>
-              Accept
-            </button>
+            {listButton}
           </div>
-          <BasicModal modal={this.state.modal} toggle={this.toggle}/>
+          <AlertModal modal={this.state.modal}
+                      toggle={this.toggle}
+                      deActivateBet={this.deactivateBet}/>
         </Fragment>
     );
   }
 }
 
-export default AcceptList;
+export default DeactivateList;

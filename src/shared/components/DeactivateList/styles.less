@@ -1,0 +1,52 @@
+@import "~Root/styles/colors";
+
+:local(.copy) {
+  font-size: 16px;
+  font-weight: 500;
+  color: white;
+  text-align: right;
+}
+
+:local(.btn) {
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  background-color: @faded-red !important;
+  color: white !important;
+  width: 166px;
+  margin-bottom: 25px;
+
+  span {
+    font-size: 13.5px;
+  }
+}
+
+:local(.btn):hover {
+  color: white;
+}
+
+:local(.address) {
+  display: block;
+  @media (max-width: 1470px) {
+    display: none;
+  }
+}
+
+:local(.small-address) {
+  display: none;
+  @media (max-width: 1470px) {
+    display: block;
+  }
+}
+
+:local(.btn-deactivate) {
+  width: 233px;
+  height: 40px;
+  border-radius: 4px;
+  background-color: @dark-charocal-gray!important;
+  color: @faded-red!important;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: default!important;
+  margin-bottom: 25px;
+}
