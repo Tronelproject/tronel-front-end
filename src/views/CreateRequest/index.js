@@ -268,7 +268,7 @@ class CreateRequests extends Component {
                           <h6 className="block-title">Amount bet</h6>
                           <div className="input-group ">
                             <input type="text"
-                                   onChange={(event) => {this.setState({betAmount: event})}}
+                                   onChange={(event) => {this.setState({betAmount: parseInt(event.target.value)})}}
                                    pattern="[0-9]*"
                                    className="form-control"
                                    placeholder="amount"/>
