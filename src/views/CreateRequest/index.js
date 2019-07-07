@@ -12,14 +12,27 @@ import {RadioGroup, Radio} from 'react-radio-group';
 
 class CreateRequests extends Component {
   state = {
-    title: 'Bitcoin',
+    currency: 'All',
     selectedPredictValue: 'predictGreater',
     selectedDateValue: 'custom',
     date: '',
+    predictPrice: '',
+    specifiedDate: '',
+    specifiedTime: '',
+    expirationDate: '',
+    expirationTime: '',
+    betAmount: '',
   };
+
+  componentDidMount() {
+    this.setState({date: moment().format('YYYY/MM/DD')});
+    console.warn(moment().format('YYYY/MM/DD'));
+    console.warn(moment().endOf('day'));
+  }
+
   handleSelect = ({key}) => {
     this.setState({
-      title: key,
+      currency: key,
     });
   };
   handlePredictChange = (value) => {
@@ -28,29 +41,59 @@ class CreateRequests extends Component {
   handleDateChange = (value) => {
     this.setState({selectedDateValue: value});
   };
-  componentDidMount() {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = today.getMonth();
-    const day = today.getDate();
-    const customDate = year + '/' + month + '/' + day;
-    this.setState({date: customDate});
-    // console.warn(customDate);
-    // console.warn(Date.UTC(year, month, day));
-  }
+
+  onChangeSpecifiedDate = (date, dateString) => {
+    // console.log(date, dateString);
+    this.setState({specifiedDate: date});
+    this.disabledExpirationDate(this.state.specifiedDate);
+  };
+
+  onChangeExpirationDate = (date, dateString) => {
+    // console.log(date, dateString);
+    this.setState({expirationDate: date});
+  };
+
+  disabledSpecifiedDate = (current) => {
+    return current && current < moment().endOf('day');
+  };
+
+  disabledExpirationDate = (current) => {
+    if (this.state.specifiedDate) {
+      return current > this.state.specifiedDate;
+    } else {
+      return current && current > moment().endOf('day');
+    }
+  };
+
+  onSubmit = () => {
+    let predictType = 1;
+    if (this.state.selectedPredictValue === 'predictLesser') {
+      predictType = 0;
+    }
+    const data = {
+      currency: this.state.currency,
+      predictPrice: this.state.predictPrice,
+      predictType: predictType,
+      specifiedDate: this.state.specifiedDate,
+      specifiedTime: this.state.specifiedTime,
+      expirationType: this.state.selectedDateValue,
+      expirationDate: this.state.expirationDate,
+      expirationTime: this.state.expirationTime,
+      betAmount: this.state.betAmount
+    };
+    console.warn(data);
+
+  };
 
   render() {
     const dateFormat = 'YYYY/MM/DD';
     const format = 'HH:mm';
     const menu = (
         <Menu onSelect={this.handleSelect} className={styles.menu}>
-          <MenuItem key="Bitcoin" className={styles.menuItem}>
-            Bitcoin
-          </MenuItem>
-          <Divider/>
-          <MenuItem key="Ethereum" className={styles.menuItem}>
-            Ethereum
-          </MenuItem>
+          <MenuItem key="All" className={styles.menuItem}>All</MenuItem>
+          <MenuItem key="Bitcoin" className={styles.menuItem}>Bitcoin</MenuItem>
+          <MenuItem key="Ethereum" className={styles.menuItem}>Ethereum</MenuItem>
+          <MenuItem key="Tron" className={styles.menuItem}>Tron</MenuItem>
         </Menu>
     );
     return (
@@ -69,7 +112,7 @@ class CreateRequests extends Component {
                         <div
                             className="col-xl-6 col-lg-9 col-md-10 col-sm-12 col-12 pr-xl-5 pr-lg-5">
                           <h6 className="block-title">Select a currency</h6>
-                          <DropDown menu={menu} title={this.state.title}/>
+                          <DropDown menu={menu} title={this.state.currency}/>
                         </div>
                       </div>
                       {/*predict price*/}
@@ -100,6 +143,10 @@ class CreateRequests extends Component {
                                 <div className="col-12 pl-0">
                                   <div className="input-group ">
                                     <input type="text"
+                                           onChange={(event) => {
+                                             this.setState(
+                                                 {predictPrice: event.target.value});
+                                           }}
                                            pattern="[0-9]*"
                                            className="form-control"
                                            disabled={this.state.selectedPredictValue ===
@@ -113,13 +160,17 @@ class CreateRequests extends Component {
                                 <div className="col-12 mt-2 pl-0">
                                   <div className="input-group">
                                     <input type="text"
-                                           pattern="[0-9]*"
-                                           className="form-control"
+                                           onChange={(event) => {
+                                             this.setState(
+                                                 {predictPrice: event.target.value});
+                                           }}
+                                           pattern='[0-9]*'
+                                           className='form-control'
                                            disabled={this.state.selectedPredictValue ===
                                            'predictGreater'}
-                                           placeholder="predict lesser"/>
-                                    <div className="input-group-prepend">
-                                      <div className="input-group-text">$</div>
+                                           placeholder='predict lesser'/>
+                                    <div className='input-group-prepend'>
+                                      <div className='input-group-text'>$</div>
                                     </div>
                                   </div>
                                 </div>
@@ -130,14 +181,28 @@ class CreateRequests extends Component {
                       </div>
                       {/*specified date*/}
                       <div className="row mt-4 pt-2">
-                        <div
-                            className="col-xl-6 col-lg-9 col-md-10 col-sm-12 col-12 pr-xl-5 pr-lg-5">
+                        <div className="col-12">
                           <h6 className="block-title">Specified date (UTC)</h6>
-                          <input type="text" value={this.state.date}
-                                 onChange={(event) => {
-                                   this.setState({date: event.target.value});
-                                 }}
-                                 className="form-control simple-form"/>
+                        </div>
+                      </div>
+                      <div
+                          className={classNames(styles['date-section'], 'row')}>
+                        <div
+                            className='col-xl-3 col-lg-4 col-md-5 col-sm-6 col-6 pr-xl-4'>
+                          <DatePicker
+                              disabledDate={this.disabledSpecifiedDate}
+                              onChange={this.onChangeSpecifiedDate}
+                              format='YYYY-MM-DD'
+                              className={styles.time}/>
+                        </div>
+                        <div className="col-xl-3 col-lg-4 col-md-5 col-sm-6 col-6
+                                             pr-xl-5  pl-xl-0 ">
+                          <TimePicker
+                              format={format}
+                              onChange={(time) => {
+                                this.setState({specifiedTime: time});
+                              }}
+                          />
                         </div>
                       </div>
                       {/*Expiration date*/}
@@ -173,19 +238,27 @@ class CreateRequests extends Component {
                         </div>
                       </div>
                       {/*custom date*/}
-                      <div className={classNames(styles['date-section'],
+                      <div className={classNames(
+                          styles['date-section'],
                           'row mt-3')}>
                         <div
                             className="col-xl-3 col-lg-4 col-md-5 col-sm-6 col-6 pr-xl-4">
                           <DatePicker
-                              defaultValue={moment('2015/01/01', dateFormat)}
+                              onChange={this.onChangeExpirationDate}
+                              disabledDate={this.disabledExpirationDate}
+                              disabled={this.state.selectedDateValue !== 'custom'}
                               format={dateFormat}
                               className={styles.time}/>
                         </div>
                         <div className="col-xl-3 col-lg-4 col-md-5 col-sm-6 col-6
                         pr-xl-5  pl-xl-0 ">
-                          <TimePicker defaultValue={moment('12:08', format)}
-                                      format={format}/>
+                          <TimePicker
+                              format={format}
+                              disabled={this.state.selectedDateValue !== 'custom'}
+                              onChange={(time) => {
+                                this.setState({expirationTime: time});
+                              }}
+                          />
                         </div>
                       </div>
                       {/*bet amount*/}
@@ -195,6 +268,7 @@ class CreateRequests extends Component {
                           <h6 className="block-title">Amount bet</h6>
                           <div className="input-group ">
                             <input type="text"
+                                   onChange={(event) => {this.setState({betAmount: event})}}
                                    pattern="[0-9]*"
                                    className="form-control"
                                    placeholder="amount"/>
@@ -205,7 +279,7 @@ class CreateRequests extends Component {
                         </div>
                       </div>
                       <button className={classNames(styles.submit,
-                          'btn mt-4 mb-4')}>
+                          'btn mt-4 mb-4')} onClick={this.onSubmit}>
                         Send Request
                       </button>
                     </div>
@@ -214,15 +288,6 @@ class CreateRequests extends Component {
               </div>
             </div>
           </div>
-          {/*<div className="container-fluid">*/}
-          {/*<div className="row">*/}
-          {/*<div className="col-12 px-0">*/}
-          {/*<img src={require(*/}
-          {/*'../../assets/images/design/Create Request.png')}*/}
-          {/*alt="" width="100%" height="100%"/>*/}
-          {/*</div>*/}
-          {/*</div>*/}
-          {/*</div>*/}
         </Fragment>
     );
   }

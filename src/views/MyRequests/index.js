@@ -2,15 +2,49 @@ import React, {Component, Fragment} from 'react';
 import Header from 'Root/shared/components/Header';
 import PageTitle from 'Root/shared/components/PageTitle';
 import DeactivateList from 'Root/shared/components/DeactivateList';
-import binanceCoin from 'Root/assets/images/binance-coin-logo.png';
-import bitCoin from 'Root/assets/images/bitcoin.png';
 import styles from './styles.less';
 
 class MyRequests extends Component {
   state = {
     horizontally: false,
     vertically: true,
+    lists: [],
   };
+
+  componentDidMount() {
+    this.setState({
+      lists: [
+        {
+          id: '5ceb99b92e98592cd9940d53',
+          address: 'TVWmQKmaJNowQewdGz16ekW2jQgXwaAfCc',
+          creator: 'TAzaDwcKucTz9YJwMWotXKib4iH4RYG8PJ',
+          acceptor: 'T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb',
+          currency: 'tron',
+          predictPrice: 8000,
+          predictTime: 1559212920, // based on seconds not miliseconds
+          predictType: 1,
+          submittedPrice: 0,
+          disabled: false,
+          done: false,
+          betAmount: 5000, // 10 in sun
+        },
+        {
+          id: '5ceb99b92e98592cd9940d53',
+          address: 'TVWmQKmaJNowQewdGz16ekW2jQgXwaAfCc',
+          creator: 'TAzaDwcKucTz9YJwMWotXKib4iH4RYG8PJ',
+          acceptor: 'T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb',
+          currency: 'bitcoin',
+          predictPrice: 6000,
+          predictTime: 1559212920, // based on seconds not miliseconds
+          predictType: 1,
+          submittedPrice: 0,
+          disabled: false,
+          done: false,
+          betAmount: 1000, // 10 in sun
+        },
+      ],
+    });
+  }
 
   showHorizontally = () => {
     this.setState({vertically: false, horizontally: true});
@@ -20,23 +54,24 @@ class MyRequests extends Component {
     this.setState({vertically: true, horizontally: false});
   };
 
+  isEven = (index) => {
+    return ((index + 1) % 2) === 0;
+  };
+
   render() {
-    let rightCol = null;
+    let column = null;
     let rightColDiv = null;
-    let leftCol = null;
     let leftColDiv = null;
 
     if (this.state.horizontally) {
-      rightCol = 'col-12';
+      column = 'col-12 mt-4';
       rightColDiv = '';
-      leftCol = 'col-12 mt-4';
       leftColDiv = '';
     }
 
     if (this.state.vertically) {
-      rightCol = 'col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mt-xl-auto mt-lg-auto mt-md-0 mt-sm-0 mt-0';
+      column = 'col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mt-4';
       rightColDiv = 'pr-xl-4 pr-lg-4';
-      leftCol = 'col-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mt-xl-auto mt-lg-auto mt-md-3 mt-sm-3 mt-3';
       leftColDiv = 'pl-xl-4 pl-lg-4';
     }
     return (
@@ -56,7 +91,8 @@ class MyRequests extends Component {
                   <div className="col-12">
                     <div className="card block-padding">
                       <div className="row">
-                        <div className="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                        <div
+                            className="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                           <h6 className="block-title">Form number</h6>
                           <div className="row">
                             <div
@@ -67,7 +103,9 @@ class MyRequests extends Component {
                                      placeholder="Enter your form number"/>
                             </div>
                             <div className="col-3 text-right pl-xl-4 pl-lg-4">
-                              <button className="btn simple-btn ml-xl-2 ml-lg-2">Search</button>
+                              <button
+                                  className="btn simple-btn ml-xl-2 ml-lg-2">Search
+                              </button>
                             </div>
                           </div>
                         </div>
@@ -75,48 +113,22 @@ class MyRequests extends Component {
                     </div>
                   </div>
                 </div>
-                <div className="row mt-5">
-                  <div className={rightCol}>
-                    <div className={rightColDiv}>
-                      <DeactivateList
-                          contractHash="UjEA674fdDe714fd979de3EdF3e6hd"
-                          Requester="WTEA674fdDe714fd979de3EdF6A8udk"
-                          Cryptocurrency={binanceCoin}
-                          width="33px"
-                          height="33px"
-                          predictedPrice="Greater than or equal $30"
-                          amountOfBets="500"
-                          date="2019/05/12"
-                          utc="12:00 UTC"
-                          horizontally={this.state.horizontally}
-                          vertically={this.state.vertically}
-                      />
-                    </div>
-                  </div>
-                  <div className={leftCol}>
-                    <div className={leftColDiv}>
-                      <DeactivateList
-                          contractHash="UjEA674fdDe714fd979de3EdF3e6hd"
-                          Requester="WTEA674fdDe714fd979de3EdF6A8udk"
-                          Cryptocurrency={bitCoin}
-                          width="33px"
-                          height="33px"
-                          predictedPrice="Lower than or equal  6000$"
-                          amountOfBets="100"
-                          date="2019/06/12"
-                          utc="10:00 UTC"
-                          horizontally={this.state.horizontally}
-                          vertically={this.state.vertically}
-                      />
-                    </div>
-                  </div>
+                <div className="row mt-4">
+                  {this.state.lists.map((list, index) => (
+                      <div className={column} key={index}>
+                        <div className={this.isEven(index) ?
+                            leftColDiv :
+                            rightColDiv}>
+                          <DeactivateList
+                              list={list}
+                              horizontally={this.state.horizontally}
+                              vertically={this.state.vertically}
+                          />
+                        </div>
+                      </div>
+                  ))
+                  }
                 </div>
-                {/*<div className="row">*/}
-                {/*<div className="col-12">*/}
-                {/*{horizontallyPart}*/}
-                {/*{verticallyPart}*/}
-                {/*</div>*/}
-                {/*</div>*/}
               </div>
             </div>
           </div>

@@ -1,25 +1,52 @@
 import React, {Component, Fragment} from 'react';
+import moment from 'moment';
 import CopyText from 'Root/shared/components/CopyText';
+import binanceCoin from 'Root/assets/images/binance-coin-logo.png';
+import bitCoin from 'Root/assets/images/bitcoin.png';
+import ethereum from 'Root/assets/images/ethereum.png';
 import classNames from 'classnames';
 import styles from './styles.less';
 
 class BetList extends Component {
   state = {};
 
+  checkImage = (currency) => {
+    if (currency === 'bitcoin') {
+      return bitCoin;
+    }
+    if (currency === 'tron') {
+      return binanceCoin;
+    }
+    if (currency === 'ethereum') {
+      return ethereum;
+    }
+  };
+
   render() {
     let state = null;
-    if (this.props.type === 'win') {
-      state = (<p className="block-type block-type-win text-center mb-4">
-        You Win
-      </p>);
-    }
-    if (this.props.type === 'lose') {
-      state = (<p className="block-type block-type-lose text-center mb-4">
-        You Lose
-      </p>);
+    const won = (
+        <p className="block-type block-type-win text-center mb-4">You Win</p>
+    );
+
+    const lost = (
+        <p className="block-type block-type-lose text-center mb-4">You Lose</p>
+    );
+    if (this.props.list.predictType === 1) {
+      if (this.props.list.submittedPrice >= this.props.list.predictPrice) {
+        state = won;
+      } else {
+        state = lost;
+      }
+    } else {
+      if (this.props.list.submittedPrice < this.props.list.predictPrice) {
+        state = won;
+      } else {
+        state = lost;
+      }
     }
 
     let newList = null;
+    const trx = 1000000;
     const cryptocurrency = (
         <div className="row">
           <div className="col-4 p-v-center">
@@ -27,9 +54,9 @@ class BetList extends Component {
               :</h6>
           </div>
           <div className="col-8 text-right">
-            <img src={this.props.Cryptocurrency}
-                 width={this.props.width}
-                 height={this.props.height}
+            <img src={this.checkImage(this.props.list.currency)}
+                 width="33px"
+                 height="33px"
                  alt="Cryptocurrency"/>
           </div>
         </div>
@@ -41,7 +68,8 @@ class BetList extends Component {
               Price :</h6>
           </div>
           <div className="col-8 text-right">
-            <h6 className="info-list-text mb-0">{this.props.predictedPrice}</h6>
+            <h6 className="info-list-text mb-0">Greater than or
+              equal ${this.props.list.predictPrice}</h6>
           </div>
         </div>
     );
@@ -55,7 +83,7 @@ class BetList extends Component {
           </div>
           <div className="col-8 text-right">
             <h6 className="info-list-text mb-0">
-              {this.props.amountOfBets}
+              {this.props.list.betAmount / trx}
               <span className="info-list-text-suffix pl-1">TRX</span>
             </h6>
           </div>
@@ -70,8 +98,10 @@ class BetList extends Component {
           </div>
           <div className="col-8 text-right">
             <h6 className="info-list-text mb-0">
-              <span className="pr-2">{this.props.date}</span>|
-              <span className="pl-2">{this.props.utc}</span>
+               <span className="pr-2">{moment.unix(this.props.list.predictTime).
+                   format('YYYY/MM/DD')}</span>|
+              <span className="pl-2">{moment.unix(this.props.list.predictTime).
+                  format('HH:mm')}</span>
             </h6>
           </div>
         </div>
@@ -160,16 +190,16 @@ class BetList extends Component {
                           <span
                               className={classNames(styles.copy, styles.address,
                                   'pl-2')}>
-                              {this.props.contractHash.slice(0, 24)}...
+                              {this.props.list.address.slice(0, 21)}...
                               <span className="pl-3">
-                              <CopyText text={this.props.contractHash}/>
+                              <CopyText text={this.props.list.address}/>
                               </span>
                           </span>
                     <span className={classNames(styles.copy,
                         styles['small-address'], 'pl-2')}>
-                              {this.props.contractHash.slice(0, 10)}...
+                              {this.props.list.address.slice(0, 10)}...
                               <span className="pl-3">
-                              <CopyText text={this.props.contractHash}/>
+                              <CopyText text={this.props.list.address}/>
                               </span>
                           </span>
                   </div>
@@ -185,16 +215,16 @@ class BetList extends Component {
                           <span
                               className={classNames(styles.copy, styles.address,
                                   'pl-2')}>
-                              {this.props.Requester.slice(0, 24)}...
+                              {this.props.list.creator.slice(0, 21)}...
                               <span className="pl-3">
-                              <CopyText text={this.props.Requester}/>
+                              <CopyText text={this.props.list.creator}/>
                               </span>
                           </span>
                     <span className={classNames(styles.copy,
                         styles['small-address'], 'pl-2')}>
-                              {this.props.Requester.slice(0, 10)}...
+                              {this.props.list.creator.slice(0, 10)}...
                               <span className="pl-3">
-                              <CopyText text={this.props.Requester}/>
+                              <CopyText text={this.props.list.creator}/>
                               </span>
                           </span>
                   </div>
@@ -210,16 +240,16 @@ class BetList extends Component {
                           <span
                               className={classNames(styles.copy, styles.address,
                                   'pl-2')}>
-                              {this.props.acceptor.slice(0, 24)}...
+                              {this.props.list.acceptor.slice(0, 21)}...
                               <span className="pl-3">
-                              <CopyText text={this.props.acceptor}/>
+                              <CopyText text={this.props.list.acceptor}/>
                               </span>
                           </span>
                     <span className={classNames(styles.copy,
                         styles['small-address'], 'pl-2')}>
-                              {this.props.acceptor.slice(0, 10)}...
+                              {this.props.list.acceptor.slice(0, 10)}...
                               <span className="pl-3">
-                              <CopyText text={this.props.acceptor}/>
+                              <CopyText text={this.props.list.acceptor}/>
                               </span>
                           </span>
                   </div>

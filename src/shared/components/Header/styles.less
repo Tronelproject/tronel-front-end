@@ -1,12 +1,16 @@
-@import "../../../styles/colors";
+@import "~Root/styles/colors";
 
 :local(.nav) {
   background-color: @secondary-dark;
   padding-left: 68px !important;
   padding-right: 68px !important;
   @media (max-width: 1245px) {
-    padding-left: 40px !important;
-    padding-right: 40px !important;
+    padding-left: 25px !important;
+    padding-right: 25px !important;
+  }
+  @media (max-width: 750px) {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
   }
 }
 

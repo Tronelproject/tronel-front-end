@@ -1,7 +1,11 @@
 import React, {Component, Fragment} from 'react';
+import moment from 'moment';
 import classNames from 'classnames';
 import CopyText from 'Root/shared/components/CopyText';
 import AlertModal from 'Root/shared/components/AlertModal';
+import binanceCoin from 'Root/assets/images/binance-coin-logo.png';
+import bitCoin from 'Root/assets/images/bitcoin.png';
+import ethereum from 'Root/assets/images/ethereum.png';
 import styles from './styles.less';
 
 class DeactivateList extends Component {
@@ -15,8 +19,40 @@ class DeactivateList extends Component {
     });
   };
 
+  checkImage = (currency) => {
+    if (currency === 'bitcoin') {
+      return bitCoin;
+    }
+    if (currency === 'tron') {
+      return binanceCoin;
+    }
+    if (currency === 'ethereum') {
+      return ethereum;
+    }
+  };
+
+  deactivateBet = () => {
+    this.props.list.disabled = true;
+  };
+
   render() {
     let newList = null;
+    const trx = 1000000;
+    let listButton = (
+        <button className={classNames(styles.btn, 'btn mt-2')}
+                onClick={this.toggle}>
+          <span className="icon-power pr-2"/>
+          Deactive this bet
+        </button>
+    );
+    if (this.props.list.disabled) {
+      listButton = (
+          <button
+              className={classNames(styles['btn-deactivate'], 'btn mt-2')}>
+            This bet has been deactived
+          </button>
+      );
+    }
     const cryptocurrency = (
         <div className="row">
           <div className="col-4 p-v-center">
@@ -24,9 +60,9 @@ class DeactivateList extends Component {
               :</h6>
           </div>
           <div className="col-8 text-right">
-            <img src={this.props.Cryptocurrency}
-                 width={this.props.width}
-                 height={this.props.height}
+            <img src={this.checkImage(this.props.list.currency)}
+                 width="33px"
+                 height="33px"
                  alt="Cryptocurrency"/>
           </div>
         </div>
@@ -38,7 +74,8 @@ class DeactivateList extends Component {
               Price :</h6>
           </div>
           <div className="col-8 text-right">
-            <h6 className="info-list-text mb-0">{this.props.predictedPrice}</h6>
+            <h6 className="info-list-text mb-0">Greater than or equal
+              ${this.props.list.predictPrice}</h6>
           </div>
         </div>
     );
@@ -52,7 +89,7 @@ class DeactivateList extends Component {
           </div>
           <div className="col-8 text-right">
             <h6 className="info-list-text mb-0">
-              {this.props.amountOfBets}
+              {this.props.list.betAmount / trx}
               <span className="info-list-text-suffix pl-1">TRX</span>
             </h6>
           </div>
@@ -67,8 +104,10 @@ class DeactivateList extends Component {
           </div>
           <div className="col-8 text-right">
             <h6 className="info-list-text mb-0">
-              <span className="pr-2">{this.props.date}</span>|
-              <span className="pl-2">{this.props.utc}</span>
+               <span className="pr-2">{moment.unix(this.props.list.predictTime).
+                   format('YYYY/MM/DD')}</span>|
+              <span className="pl-2">{moment.unix(this.props.list.predictTime).
+                  format('HH:mm')}</span>
             </h6>
           </div>
         </div>
@@ -156,16 +195,16 @@ class DeactivateList extends Component {
                           <span
                               className={classNames(styles.copy, styles.address,
                                   'pl-2')}>
-                              {this.props.contractHash.slice(0, 24)}...
+                              {this.props.list.address.slice(0, 21)}...
                               <span className="pl-3">
-                              <CopyText text={this.props.contractHash}/>
+                              <CopyText text={this.props.list.address}/>
                               </span>
                           </span>
                     <span className={classNames(styles.copy,
                         styles['small-address'], 'pl-2')}>
-                              {this.props.contractHash.slice(0, 10)}...
+                              {this.props.list.address.slice(0, 10)}...
                               <span className="pl-3">
-                              <CopyText text={this.props.contractHash}/>
+                              <CopyText text={this.props.list.address}/>
                               </span>
                           </span>
                   </div>
@@ -181,16 +220,16 @@ class DeactivateList extends Component {
                           <span
                               className={classNames(styles.copy, styles.address,
                                   'pl-2')}>
-                              {this.props.Requester.slice(0, 24)}...
+                              {this.props.list.creator.slice(0, 21)}...
                               <span className="pl-3">
-                              <CopyText text={this.props.Requester}/>
+                              <CopyText text={this.props.list.creator}/>
                               </span>
                           </span>
                     <span className={classNames(styles.copy,
                         styles['small-address'], 'pl-2')}>
-                              {this.props.Requester.slice(0, 10)}...
+                              {this.props.list.creator.slice(0, 10)}...
                               <span className="pl-3">
-                              <CopyText text={this.props.Requester}/>
+                              <CopyText text={this.props.list.creator}/>
                               </span>
                           </span>
                   </div>
@@ -205,12 +244,11 @@ class DeactivateList extends Component {
               the
               acceptor user in the bet gets 500 TRX and is the winner.
             </p>
-            <button className={classNames(styles.btn, 'btn mt-2')}  onClick={this.toggle}>
-              <span className="icon-power pr-2"/>
-              Deactive this bet
-            </button>
+            {listButton}
           </div>
-          <AlertModal modal={this.state.modal} toggle={this.toggle}/>
+          <AlertModal modal={this.state.modal}
+                      toggle={this.toggle}
+                      deActivateBet={this.deactivateBet}/>
         </Fragment>
     );
   }

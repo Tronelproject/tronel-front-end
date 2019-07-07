@@ -11,8 +11,8 @@ const AlertModal = (props) => (
           <ModalBody>
             <div className="row">
               <div className="col-1">
-                <div className={classNames(styles.attention,'p-vh-center')}>
-                  <span className="icon-high-importance c-vh-center" />
+                <div className={classNames(styles.attention, 'p-vh-center')}>
+                  <span className="icon-high-importance c-vh-center"/>
                 </div>
               </div>
               <div className="col-11">
@@ -24,10 +24,15 @@ const AlertModal = (props) => (
             </div>
           </ModalBody>
           <ModalFooter>
-            <button className={classNames(styles.cancel, 'btn')} onClick={props.toggle}>
+            <button className={classNames(styles.cancel, 'btn')}
+                    onClick={props.toggle}>
               Cancel
             </button>
-            <button className={classNames(styles.deactive, 'btn')} onClick={props.toggle}>
+            <button className={classNames(styles.deactive, 'btn')}
+                    onClick={() => {
+                      props.deActivateBet();
+                      props.toggle();
+                    }}>
               Deactive
             </button>
           </ModalFooter>

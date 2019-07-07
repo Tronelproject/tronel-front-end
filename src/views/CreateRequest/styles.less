@@ -44,13 +44,17 @@
   }
 
   div {
-    input {
+    input, input:disabled {
       height: 38px;
       border-radius: 4px;
       border: none !important;
       background: @dark-charocal-gray;
       color: @brownish-grey;
       transition: 0.3s ease-in;
+    }
+
+    input::placeholder, input:disabled::placeholder {
+      color: @brownish-grey;
     }
 
     input:focus {
@@ -76,7 +80,7 @@
   font-size: 16px;
   font-weight: 500;
   color: white !important;
-  transition: 0.3s ease-in!important;
+  transition: 0.3s ease-in !important;
 }
 
 :local(.submit):hover {
