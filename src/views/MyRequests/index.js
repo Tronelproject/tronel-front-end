@@ -1,4 +1,5 @@
 import React, {Component, Fragment} from 'react';
+import { connect } from 'react-redux';
 import Header from 'Root/shared/components/Header';
 import PageTitle from 'Root/shared/components/PageTitle';
 import DeactivateList from 'Root/shared/components/DeactivateList';
@@ -8,43 +9,7 @@ class MyRequests extends Component {
   state = {
     horizontally: false,
     vertically: true,
-    lists: [],
   };
-
-  componentDidMount() {
-    this.setState({
-      lists: [
-        {
-          id: '5ceb99b92e98592cd9940d53',
-          address: 'TVWmQKmaJNowQewdGz16ekW2jQgXwaAfCc',
-          creator: 'TAzaDwcKucTz9YJwMWotXKib4iH4RYG8PJ',
-          acceptor: 'T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb',
-          currency: 'tron',
-          predictPrice: 8000,
-          predictTime: 1559212920, // based on seconds not miliseconds
-          predictType: 1,
-          submittedPrice: 0,
-          disabled: false,
-          done: false,
-          betAmount: 5000, // 10 in sun
-        },
-        {
-          id: '5ceb99b92e98592cd9940d53',
-          address: 'TVWmQKmaJNowQewdGz16ekW2jQgXwaAfCc',
-          creator: 'TAzaDwcKucTz9YJwMWotXKib4iH4RYG8PJ',
-          acceptor: 'T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb',
-          currency: 'bitcoin',
-          predictPrice: 6000,
-          predictTime: 1559212920, // based on seconds not miliseconds
-          predictType: 1,
-          submittedPrice: 0,
-          disabled: false,
-          done: false,
-          betAmount: 1000, // 10 in sun
-        },
-      ],
-    });
-  }
 
   showHorizontally = () => {
     this.setState({vertically: false, horizontally: true});
@@ -114,7 +79,7 @@ class MyRequests extends Component {
                   </div>
                 </div>
                 <div className="row mt-4">
-                  {this.state.lists.map((list, index) => (
+                  {this.props.bets.map((list, index) => (
                       <div className={column} key={index}>
                         <div className={this.isEven(index) ?
                             leftColDiv :
@@ -137,4 +102,6 @@ class MyRequests extends Component {
   }
 }
 
-export default MyRequests;
+export default connect(state => ({
+  bets: state.myrequests,
+}))(MyRequests);
