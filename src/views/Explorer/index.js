@@ -1,6 +1,7 @@
 import React, {Fragment, Component} from 'react';
 import Menu, {Item as MenuItem} from 'rc-menu';
 import Slider, {createSliderWithTooltip} from 'rc-slider';
+import { connect } from 'react-redux';
 import Header from 'Root/shared/components/Header';
 import PageTitle from 'Root/shared/components/PageTitle';
 import DropDown from 'Root/shared/components/Dropdown';
@@ -19,42 +20,9 @@ class Explorer extends Component {
     horizontally: false,
     vertically: true,
     currency: 'All',
-    lists: [],
   };
 
   componentDidMount() {
-    this.setState({
-      lists: [
-        {
-          id: '5ceb99b92e98592cd9940d53',
-          address: 'TVWmQKmaJNowQewdGz16ekW2jQgXwaAfCc',
-          creator: 'TAzaDwcKucTz9YJwMWotXKib4iH4RYG8PJ',
-          acceptor: 'T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb',
-          currency: 'tron',
-          predictPrice: 8000,
-          predictTime: 1559212920, // based on seconds not miliseconds
-          predictType: 1,
-          submittedPrice: 0,
-          disabled: false,
-          done: false,
-          betAmount: 5000 // 10 in sun
-        },
-        {
-          id: '5ceb99b92e98592cd9940d53',
-          address: 'TVWmQKmaJNowQewdGz16ekW2jQgXwaAfCc',
-          creator: 'TAzaDwcKucTz9YJwMWotXKib4iH4RYG8PJ',
-          acceptor: 'T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb',
-          currency: 'bitcoin',
-          predictPrice: 6000,
-          predictTime: 1559212920, // based on seconds not miliseconds
-          predictType: 1,
-          submittedPrice: 0,
-          disabled: false,
-          done: false,
-          betAmount: 1000 // 10 in sun
-        }
-      ],
-    });
   }
 
   showHorizontally = () => {
@@ -171,7 +139,7 @@ class Explorer extends Component {
                   </div>
                 </div>
                 <div className="row mt-4">
-                  {this.state.lists.map((list, index) => (
+                  {this.props.bets.map((list, index) => (
                       <div className={column}>
                         <div className={this.isEven(index) ?
                             leftColDiv :
@@ -203,4 +171,6 @@ class Explorer extends Component {
   }
 }
 
-export default Explorer;
+export default connect(state => ({
+  bets: state.bets,
+}))(Explorer);
