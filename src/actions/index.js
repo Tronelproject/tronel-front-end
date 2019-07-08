@@ -12,4 +12,8 @@ export default {
     ADD: 'myrequests/ADD',
     DISABLE: 'myrequests/DISABLE',
   },
+  modal: {
+    SHOW: 'modal/SHOW',
+    HIDE: 'modal/HIDE',
+  },
 };

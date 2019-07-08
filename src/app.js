@@ -14,6 +14,9 @@ let modal = false;
   if (!global.tronWeb) {
     // show alert
     modal = true;
+    setTimeout(() => {
+      modal = false;
+    }, 3000);
     console.error('there is no tronlink');
   } else {
     const bets = await getBets();
