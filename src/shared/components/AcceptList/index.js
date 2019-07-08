@@ -4,6 +4,7 @@ import CopyText from 'Root/shared/components/CopyText';
 import binanceCoin from 'Root/assets/images/binance-coin-logo.png';
 import bitCoin from 'Root/assets/images/bitcoin.png';
 import ethereum from 'Root/assets/images/ethereum.png';
+import accept from 'Root/actions/mybets/accept';
 import classNames from 'classnames';
 import styles from './styles.less';
 
@@ -218,7 +219,7 @@ class AcceptList extends Component {
               the
               acceptor user in the bet gets 500 TRX and is the winner.
             </p>
-            <button className={classNames(styles.btn, 'btn mt-2')}>
+            <button onClick={() => accept(this.props.list._id)} className={classNames(styles.btn, 'btn mt-2')}>
               <span className="icon-checked pr-2"/>
               Accept
             </button>
