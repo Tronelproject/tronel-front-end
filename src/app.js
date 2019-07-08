@@ -19,6 +19,17 @@ async function loadAllStuff() {
   loadBets(bets.data);
   loadMyBets(bets.data);
   loadMyRequests(bets.data);
+
+  setInterval(async () => {
+    const balance = await global.tronWeb.trx.getBalance(global.tronWeb.defaultAddress.base58);
+    store.dispatch({
+      type: types.user.LOAD,
+      user: {
+        adddress: global.tronWeb.defaultAddress.base58,
+        balance,
+      },
+    });
+  }, 2000);
 }
 
 (async () => {
