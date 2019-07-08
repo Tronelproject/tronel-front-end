@@ -2,6 +2,7 @@ import types from 'Root/actions';
 import store from 'Root/store';
 
 export default (bets) => {
+  console.log(global.tronWeb.defaultAddress);
   store.dispatch({
     type: types.myrequests.LOAD,
     bets: bets.filter(

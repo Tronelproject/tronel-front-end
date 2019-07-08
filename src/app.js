@@ -9,6 +9,18 @@ import store from 'Root/store';
 import types from 'Root/actions';
 import App from './views';
 
+async function loadAllStuff() {
+  const bets = await getBets();
+
+  if (!bets) {
+    return;
+  }
+
+  loadBets(bets.data);
+  loadMyBets(bets.data);
+  loadMyRequests(bets.data);
+}
+
 (async () => {
   let interval;
   if (!global.tronWeb || !global.tronWeb.ready) {
@@ -23,18 +35,12 @@ import App from './views';
         });
 
         clearInterval(interval);
+
+        loadAllStuff();
       }
     }, 1000);
   } else {
-    const bets = await getBets();
-
-    if (!bets) {
-      return;
-    }
-
-    loadBets(bets.data);
-    loadMyBets(bets.data);
-    loadMyRequests(bets.data);
+    await loadAllStuff();
   }
 
   render(
