@@ -16,4 +16,7 @@ export default {
     SHOW: 'modal/SHOW',
     HIDE: 'modal/HIDE',
   },
+  user: {
+    LOAD: 'user/LOAD',
+  },
 };
