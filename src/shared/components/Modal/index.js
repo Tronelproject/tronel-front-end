@@ -2,17 +2,10 @@ import React, {Fragment, Component} from 'react';
 import classnames from 'classnames';
 import styles from './styles.less';
 import {Modal, ModalBody} from 'reactstrap';
+import { connect } from 'react-redux';
 import wallet from 'Root/assets/images/wallet-circle.svg';
 
 class BasicModal extends Component {
-  state = {
-    isOpen: false,
-  };
-
-  componentDidMount() {
-    this.toggle();
-  }
-
   toggle = () => {
     this.setState({isOpen: !this.state.isOpen});
   };
@@ -21,7 +14,7 @@ class BasicModal extends Component {
     return (
         <Fragment>
           <div className="p-vh-center">
-            <Modal isOpen={this.state.isOpen} toggle={this.toggle}
+            <Modal isOpen={this.props.modalStatus} toggle={this.toggle}
                    className={classnames(styles.modal)}>
               <div className="row">
                 <div className="col-12 text-right w-100">
@@ -48,4 +41,4 @@ class BasicModal extends Component {
   }
 };
 
-export default BasicModal;
+export default connect(state => ({ modalStatus: state.modal }))(BasicModal);

@@ -10,7 +10,7 @@ export default (props) => (
   <Provider store={store}>
     <Router history={history}>
       <App />
-      <BasicModal modal={props.modal}/>
+      <BasicModal />
     </Router>
   </Provider>
 );
