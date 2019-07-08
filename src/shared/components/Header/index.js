@@ -4,11 +4,12 @@ import SideNav from './SideNav';
 import logo from 'Root/assets/images/tronel-white.png';
 import diamonds from 'Root/assets/images/diamonds.png';
 import {explorerRoute} from 'Root/constants/routes';
+import { connect } from 'react-redux';
 import Nav from './Nav';
 import classNames from 'classnames';
 import styles from './styles.less';
 
-const Header = () => (
+const Header = (props) => (
     <Fragment>
       <nav className={classNames(styles.nav,
           'navbar navbar-expand-lg py-xl-0 py-lg-0 py-md-3 py-sm-3 py-3 ')}>
@@ -18,7 +19,7 @@ const Header = () => (
         <div className="collapse navbar-collapse">
           <Nav/>
           <div className={styles['balance-box']}>
-            <h6 className={styles.trx}>100 TRX</h6>
+            <h6 className={styles.trx}>{(props.user.balance / 1000000).toFixed(2)} TRX</h6>
             <h6 className={styles.balance}>
               <span>
                 <img src={diamonds}
@@ -33,4 +34,4 @@ const Header = () => (
     </Fragment>
 );
 
-export default Header;
+export default connect(state => ({ user: state.user}))(Header);
