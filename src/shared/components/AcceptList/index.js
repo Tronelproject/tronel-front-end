@@ -1,7 +1,6 @@
 import React, {Fragment, Component} from 'react';
 import moment from 'moment';
 import CopyText from 'Root/shared/components/CopyText';
-import BasicModal from 'Root/shared/components/Modal';
 import binanceCoin from 'Root/assets/images/binance-coin-logo.png';
 import bitCoin from 'Root/assets/images/bitcoin.png';
 import ethereum from 'Root/assets/images/ethereum.png';
@@ -11,12 +10,6 @@ import styles from './styles.less';
 class AcceptList extends Component {
   state = {
     modal: false,
-  };
-
-  toggle = () => {
-    this.setState({
-      modal: !this.state.modal,
-    });
   };
 
   checkImage = (currency) => {
@@ -56,7 +49,7 @@ class AcceptList extends Component {
           </div>
           <div className="col-8 text-right">
             <h6 className="info-list-text mb-0">Greater than or equal
-              ${this.props.list.predictPrice}</h6>
+              ${this.props.list.predictionPrice}</h6>
           </div>
         </div>
     );
@@ -85,9 +78,9 @@ class AcceptList extends Component {
           </div>
           <div className="col-8 text-right">
             <h6 className="info-list-text mb-0">
-              <span className="pr-2">{moment.unix(this.props.list.predictTime).
+              <span className="pr-2">{moment.unix(this.props.list.specifiedDate).
                   format('YYYY/MM/DD')}</span>|
-              <span className="pl-2">{moment.unix(this.props.list.predictTime).
+              <span className="pl-2">{moment.unix(this.props.list.specifiedDate).
                   format('HH:mm')}</span>
             </h6>
           </div>
@@ -176,16 +169,16 @@ class AcceptList extends Component {
                           <span
                               className={classNames(styles.copy, styles.address,
                                   'pl-2')}>
-                              {this.props.list.address.slice(0, 21)}...
+                              {this.props.list._id.slice(0, 21)}...
                               <span className="pl-3">
-                              <CopyText text={this.props.list.address}/>
+                              <CopyText text={this.props.list._id}/>
                               </span>
                           </span>
                     <span className={classNames(styles.copy,
                         styles['small-address'], 'pl-2')}>
-                              {this.props.list.address.slice(0, 10)}...
+                              {this.props.list._id.slice(0, 10)}...
                               <span className="pl-3">
-                              <CopyText text={this.props.list.address}/>
+                              <CopyText text={this.props.list._id}/>
                               </span>
                           </span>
                   </div>
@@ -225,13 +218,11 @@ class AcceptList extends Component {
               the
               acceptor user in the bet gets 500 TRX and is the winner.
             </p>
-            <button className={classNames(styles.btn, 'btn mt-2')}
-                    onClick={this.toggle}>
+            <button className={classNames(styles.btn, 'btn mt-2')}>
               <span className="icon-checked pr-2"/>
               Accept
             </button>
           </div>
-          <BasicModal modal={this.state.modal} toggle={this.toggle}/>
         </Fragment>
     );
   }

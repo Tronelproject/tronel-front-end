@@ -31,14 +31,14 @@ class BetList extends Component {
     const lost = (
         <p className="block-type block-type-lose text-center mb-4">You Lose</p>
     );
-    if (this.props.list.predictType === 1) {
-      if (this.props.list.submittedPrice >= this.props.list.predictPrice) {
+    if (this.props.list.predictionType === 1) {
+      if (this.props.list.submittedPrice >= this.props.list.predictionPrice) {
         state = won;
       } else {
         state = lost;
       }
     } else {
-      if (this.props.list.submittedPrice < this.props.list.predictPrice) {
+      if (this.props.list.submittedPrice < this.props.list.predictionPrice) {
         state = won;
       } else {
         state = lost;
@@ -69,7 +69,7 @@ class BetList extends Component {
           </div>
           <div className="col-8 text-right">
             <h6 className="info-list-text mb-0">Greater than or
-              equal ${this.props.list.predictPrice}</h6>
+              equal ${this.props.list.predictionPrice}</h6>
           </div>
         </div>
     );
@@ -98,9 +98,9 @@ class BetList extends Component {
           </div>
           <div className="col-8 text-right">
             <h6 className="info-list-text mb-0">
-               <span className="pr-2">{moment.unix(this.props.list.predictTime).
+               <span className="pr-2">{moment.unix(this.props.list.specifiedDate).
                    format('YYYY/MM/DD')}</span>|
-              <span className="pl-2">{moment.unix(this.props.list.predictTime).
+              <span className="pl-2">{moment.unix(this.props.list.specifiedDate).
                   format('HH:mm')}</span>
             </h6>
           </div>
@@ -190,16 +190,16 @@ class BetList extends Component {
                           <span
                               className={classNames(styles.copy, styles.address,
                                   'pl-2')}>
-                              {this.props.list.address.slice(0, 21)}...
+                              {this.props.list._id.slice(0, 21)}...
                               <span className="pl-3">
-                              <CopyText text={this.props.list.address}/>
+                              <CopyText text={this.props.list._id}/>
                               </span>
                           </span>
                     <span className={classNames(styles.copy,
                         styles['small-address'], 'pl-2')}>
-                              {this.props.list.address.slice(0, 10)}...
+                              {this.props.list._id.slice(0, 10)}...
                               <span className="pl-3">
-                              <CopyText text={this.props.list.address}/>
+                              <CopyText text={this.props.list._id}/>
                               </span>
                           </span>
                   </div>

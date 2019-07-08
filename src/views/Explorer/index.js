@@ -1,7 +1,7 @@
 import React, {Fragment, Component} from 'react';
 import Menu, {Item as MenuItem} from 'rc-menu';
 import Slider, {createSliderWithTooltip} from 'rc-slider';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import Header from 'Root/shared/components/Header';
 import PageTitle from 'Root/shared/components/PageTitle';
 import DropDown from 'Root/shared/components/Dropdown';
@@ -20,6 +20,7 @@ class Explorer extends Component {
     horizontally: false,
     vertically: true,
     currency: 'All',
+    currencyKey: 'all',
   };
 
   componentDidMount() {
@@ -35,8 +36,10 @@ class Explorer extends Component {
 
   handleSelect = ({key}) => {
     this.setState({
-      currency: key,
+      currency: key.charAt(0).toUpperCase() + key.slice(1),
+      currencyKey: key,
     });
+    // console.warn(key);
   };
 
   isEven = (index) => {
@@ -62,10 +65,11 @@ class Explorer extends Component {
 
     const menu = (
         <Menu onSelect={this.handleSelect} className={styles.menu}>
-          <MenuItem key="All" className={styles.menuItem}>All</MenuItem>
-          <MenuItem key="Bitcoin" className={styles.menuItem}>Bitcoin</MenuItem>
-          <MenuItem key="Ethereum" className={styles.menuItem}>Ethereum</MenuItem>
-          <MenuItem key="Tron" className={styles.menuItem}>Tron</MenuItem>
+          <MenuItem key="all" className={styles.menuItem}>All</MenuItem>
+          <MenuItem key="bitcoin" className={styles.menuItem}>Bitcoin</MenuItem>
+          <MenuItem key="ethereum"
+                    className={styles.menuItem}>Ethereum</MenuItem>
+          <MenuItem key="tron" className={styles.menuItem}>Tron</MenuItem>
         </Menu>
     );
     return (
@@ -158,13 +162,13 @@ class Explorer extends Component {
             </div>
           </div>
           {/*<div className="container-fluid">*/}
-            {/*<div className="row">*/}
-              {/*<div className="col-12 px-0">*/}
-                {/*<img src={require(*/}
-                    {/*'../../assets/images/design/Explorer(Horizontal).png')}*/}
-                     {/*alt="" width="100%" height="100%"/>*/}
-              {/*</div>*/}
-            {/*</div>*/}
+          {/*<div className="row">*/}
+          {/*<div className="col-12 px-0">*/}
+          {/*<img src={require(*/}
+          {/*'../../assets/images/design/Explorer(Horizontal).png')}*/}
+          {/*alt="" width="100%" height="100%"/>*/}
+          {/*</div>*/}
+          {/*</div>*/}
           {/*</div>*/}
         </Fragment>
     );
