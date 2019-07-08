@@ -7,6 +7,7 @@ import {TimePicker} from 'antd';
 import 'antd/lib/date-picker/style/css';
 import Header from 'Root/shared/components/Header';
 import DropDown from 'Root/shared/components/Dropdown';
+import addBet from 'Root/actions/myrequests/add';
 import styles from './styles.less';
 import {RadioGroup, Radio} from 'react-radio-group';
 
@@ -81,8 +82,15 @@ class CreateRequests extends Component {
       expirationTime: this.state.expirationTime,
       betAmount: this.state.betAmount
     };
-    console.warn(data);
 
+    addBet({
+      currency: this.state.currency,
+      predictionPrice: this.state.predictPrice,
+      predictionType: predictType,
+      specifiedDate: this.state.specifiedDate.toDate().getTime(),
+      lockTime: this.state.expirationDate.toDate().getTime(),
+      betAmount: this.state.betAmount,
+    });
   };
 
   render() {

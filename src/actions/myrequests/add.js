@@ -1,33 +1,34 @@
 import types from 'Root/actions';
-import betdata from 'Root/helpers/betdata';
-import { manager } from 'Root/config';
+import config from 'Root/config';
 import fetch from 'Root/helpers/fetch';
 import store from 'Root/store';
 
 export default async (details) => {
   let res;
   try {
-    res = await global.tronWeb.contract().new({
-      ...betdata,
-      userFeePercentage: 1,
-      callValue: details.betAmount,
+    const factory = await global.tronWeb.contract().at(config.factory);
+
+    res = await factory.createBet(
+      details.currency,
+      details.predictionPrice,
+      Math.floor(details.specifiedDate / 1000),
+      Math.floor(details.lockTime / 1000),
+      details.predictionType,
+      details.betAmount * 1000000,
+    ).send({
+      callValue: details.betAmount * 1000000,
       shouldPollResponse: true,
-      parameters: [
-        manager,
-        details.currency,
-        details.predictPrice,
-        details.predictTime,
-        details.predictType,
-      ],
     });
   } catch (e) {
+    console.log(e);
+
     return;
   }
 
   const bet = await fetch('/bets', {
     method: 'POST',
-    data: JSON.stringify({
-      address: global.tronWeb.address.fromHex(res.address),
+    body: JSON.stringify({
+      contractIndex: res.toNumber(),
     }),
   });
 
