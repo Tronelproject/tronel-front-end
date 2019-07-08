@@ -20,12 +20,21 @@ async function loadAllStuff() {
   loadMyBets(bets.data);
   loadMyRequests(bets.data);
 
+  const balance = await global.tronWeb.trx.getBalance(global.tronWeb.defaultAddress.base58);
+  store.dispatch({
+    type: types.user.LOAD,
+    user: {
+      address: global.tronWeb.defaultAddress.base58,
+      balance,
+    },
+  });
+
   setInterval(async () => {
     const balance = await global.tronWeb.trx.getBalance(global.tronWeb.defaultAddress.base58);
     store.dispatch({
       type: types.user.LOAD,
       user: {
-        adddress: global.tronWeb.defaultAddress.base58,
+        address: global.tronWeb.defaultAddress.base58,
         balance,
       },
     });
@@ -41,13 +50,13 @@ async function loadAllStuff() {
 
     interval = setInterval(() => {
       if (global.tronWeb && global.tronWeb.ready) {
+        loadAllStuff();
+
         store.dispatch({
           type: types.modal.HIDE,
         });
 
         clearInterval(interval);
-
-        loadAllStuff();
       }
     }, 1000);
   } else {
