@@ -15,33 +15,37 @@ class MyRequests extends Component {
     this.setState({
       lists: [
         {
-          id: '5ceb99b92e98592cd9940d53',
-          address: 'TVWmQKmaJNowQewdGz16ekW2jQgXwaAfCc',
-          creator: 'TAzaDwcKucTz9YJwMWotXKib4iH4RYG8PJ',
-          acceptor: 'T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb',
-          currency: 'tron',
-          predictPrice: 8000,
-          predictTime: 1559212920, // based on seconds not miliseconds
-          predictType: 1,
-          submittedPrice: 0,
-          disabled: false,
-          done: false,
-          betAmount: 5000, // 10 in sun
+          "acceptor": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "_id": "5d22f87a03125c4e06981b1c",
+          "creator": "TDyWa7saV4hpZUup45arrQjoRoe13Wf5aY",
+          "currency": "bitcoin",
+          "predictionPrice": 41,
+          "specifiedDate": 1564473698,
+          "lockTime": 1563782503,
+          "predictionType": 1,
+          "submittedPrice": 0,
+          "betAmount": 24000000,
+          "disabled": false,
+          "done": false,
+          "contractIndex": 6,
+          "__v": 0
         },
         {
-          id: '5ceb99b92e98592cd9940d53',
-          address: 'TVWmQKmaJNowQewdGz16ekW2jQgXwaAfCc',
-          creator: 'TAzaDwcKucTz9YJwMWotXKib4iH4RYG8PJ',
-          acceptor: 'T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb',
-          currency: 'bitcoin',
-          predictPrice: 6000,
-          predictTime: 1559212920, // based on seconds not miliseconds
-          predictType: 1,
-          submittedPrice: 0,
-          disabled: false,
-          done: false,
-          betAmount: 1000, // 10 in sun
-        },
+          "acceptor": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "_id": "5d22f87a03125c4e06981b1c",
+          "creator": "TDyWa7saV4hpZUup45arrQjoRoe13Wf5aY",
+          "currency": "tron",
+          "predictionPrice": 41,
+          "specifiedDate": 1564473698,
+          "lockTime": 1563782503,
+          "predictionType": 1,
+          "submittedPrice": 0,
+          "betAmount": 24000000,
+          "disabled": false,
+          "done": false,
+          "contractIndex": 6,
+          "__v": 0
+        }
       ],
     });
   }

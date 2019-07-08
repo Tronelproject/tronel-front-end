@@ -12,7 +12,8 @@ import {RadioGroup, Radio} from 'react-radio-group';
 
 class CreateRequests extends Component {
   state = {
-    currency: 'All',
+    currency: 'Bitcoin',
+    currencyKey: 'bitcoin',
     selectedPredictValue: 'predictGreater',
     selectedDateValue: 'custom',
     date: '',
@@ -32,8 +33,10 @@ class CreateRequests extends Component {
 
   handleSelect = ({key}) => {
     this.setState({
-      currency: key,
+      currency: key.charAt(0).toUpperCase() + key.slice(1),
+      currencyKey: key,
     });
+    // console.warn(key);
   };
   handlePredictChange = (value) => {
     this.setState({selectedPredictValue: value});
@@ -71,7 +74,7 @@ class CreateRequests extends Component {
       predictType = 0;
     }
     const data = {
-      currency: this.state.currency,
+      currency: this.state.currencyKey,
       predictPrice: this.state.predictPrice,
       predictType: predictType,
       specifiedDate: this.state.specifiedDate,
@@ -79,7 +82,7 @@ class CreateRequests extends Component {
       expirationType: this.state.selectedDateValue,
       expirationDate: this.state.expirationDate,
       expirationTime: this.state.expirationTime,
-      betAmount: this.state.betAmount
+      betAmount: this.state.betAmount,
     };
     console.warn(data);
 
@@ -90,10 +93,10 @@ class CreateRequests extends Component {
     const format = 'HH:mm';
     const menu = (
         <Menu onSelect={this.handleSelect} className={styles.menu}>
-          <MenuItem key="All" className={styles.menuItem}>All</MenuItem>
-          <MenuItem key="Bitcoin" className={styles.menuItem}>Bitcoin</MenuItem>
-          <MenuItem key="Ethereum" className={styles.menuItem}>Ethereum</MenuItem>
-          <MenuItem key="Tron" className={styles.menuItem}>Tron</MenuItem>
+          <MenuItem key="bitcoin" className={styles.menuItem}>Bitcoin</MenuItem>
+          <MenuItem key="ethereum"
+                    className={styles.menuItem}>Ethereum</MenuItem>
+          <MenuItem key="tron" className={styles.menuItem}>Tron</MenuItem>
         </Menu>
     );
     return (
@@ -189,8 +192,8 @@ class CreateRequests extends Component {
                           className={classNames(styles['date-section'], 'row')}>
                         <div
                             className='col-xl-3 col-lg-4 col-md-5 col-sm-6 col-6 pr-xl-4'>
+                          {/*disabledDate={this.disabledSpecifiedDate}*/}
                           <DatePicker
-                              disabledDate={this.disabledSpecifiedDate}
                               onChange={this.onChangeSpecifiedDate}
                               format='YYYY-MM-DD'
                               className={styles.time}/>
@@ -243,10 +246,11 @@ class CreateRequests extends Component {
                           'row mt-3')}>
                         <div
                             className="col-xl-3 col-lg-4 col-md-5 col-sm-6 col-6 pr-xl-4">
+                          {/*disabledDate={this.disabledExpirationDate}*/}
                           <DatePicker
                               onChange={this.onChangeExpirationDate}
-                              disabledDate={this.disabledExpirationDate}
-                              disabled={this.state.selectedDateValue !== 'custom'}
+                              disabled={this.state.selectedDateValue !==
+                              'custom'}
                               format={dateFormat}
                               className={styles.time}/>
                         </div>
@@ -254,7 +258,8 @@ class CreateRequests extends Component {
                         pr-xl-5  pl-xl-0 ">
                           <TimePicker
                               format={format}
-                              disabled={this.state.selectedDateValue !== 'custom'}
+                              disabled={this.state.selectedDateValue !==
+                              'custom'}
                               onChange={(time) => {
                                 this.setState({expirationTime: time});
                               }}
@@ -268,7 +273,9 @@ class CreateRequests extends Component {
                           <h6 className="block-title">Amount bet</h6>
                           <div className="input-group ">
                             <input type="text"
-                                   onChange={(event) => {this.setState({betAmount: event})}}
+                                   onChange={(event) => {
+                                     this.setState({betAmount: event});
+                                   }}
                                    pattern="[0-9]*"
                                    className="form-control"
                                    placeholder="amount"/>
