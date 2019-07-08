@@ -1,15 +1,18 @@
 import types from 'Root/actions';
 import fetch from 'Root/helpers/fetch';
 import store from 'Root/store';
+import config from 'Root/config';
 
 export default async (id) => {
-  const address = store.getState().myrequests.find(i => i.id === id).address;
+  const contractIndex = store.getState().myrequests.find(i => i._id === id).contractIndex;
+  console.log(contractIndex);
   try {
-    const betContract = await global.tronWeb.contract().at(address);
-    await betContract.disable().send({
+    const factory = await global.tronWeb.contract().at(config.factory);
+    await factory.disableBet(contractIndex).send({
       shouldPollResponse: true,
     });
   } catch (e) {
+    console.log(e);
     return;
   }
 

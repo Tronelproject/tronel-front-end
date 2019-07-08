@@ -4,7 +4,7 @@ import fetch from 'Root/helpers/fetch';
 import removeFromBets from 'Root/actions/bets/remove';
 
 export default async (id) => {
-  const bet = store.getState().bets.find(i => i.id === id);
+  const bet = store.getState().bets.find(i => i._id === id);
 
   try {
     const contract = await global.tronWeb.contract().at(bet.address);

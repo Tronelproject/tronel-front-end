@@ -1,6 +1,7 @@
 import React, {Fragment} from 'react';
 import {Modal, ModalBody, ModalFooter} from 'reactstrap';
 import classNames from 'classnames';
+import disable from 'Root/actions/myrequests/disable';
 import styles from './styles.less';
 
 const AlertModal = (props) => (
@@ -30,8 +31,8 @@ const AlertModal = (props) => (
             </button>
             <button className={classNames(styles.deactive, 'btn')}
                     onClick={() => {
-                      props.deActivateBet();
                       props.toggle();
+                      disable(props.bet._id);
                     }}>
               Deactive
             </button>

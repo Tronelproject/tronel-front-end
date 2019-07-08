@@ -31,10 +31,6 @@ class DeactivateList extends Component {
     }
   };
 
-  deactivateBet = () => {
-    this.props.list.disabled = true;
-  };
-
   render() {
     let newList = null;
     const trx = 1000000;
@@ -248,7 +244,7 @@ class DeactivateList extends Component {
           </div>
           <AlertModal modal={this.state.modal}
                       toggle={this.toggle}
-                      deActivateBet={this.deactivateBet}/>
+                      bet={this.props.list}/>
         </Fragment>
     );
   }

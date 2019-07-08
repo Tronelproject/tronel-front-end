@@ -14,7 +14,7 @@ export default (state = [], action) => {
     }
 
     case types.myrequests.DISABLE: {
-      const index = state.findIndex(i => i.id === action.id);
+      const index = state.findIndex(i => i._id === action.id);
 
       return [
         ...state.slice(0, index),
