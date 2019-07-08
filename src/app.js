@@ -1,20 +1,19 @@
 import 'babel-polyfill';
 import React from 'react';
-import { render } from 'react-dom';
+import {render} from 'react-dom';
 import loadBets from 'Root/actions/bets/load';
 import loadMyBets from 'Root/actions/mybets/load';
 import loadMyRequests from 'Root/actions/myrequests/load';
 import getBets from 'Root/helpers/getBets';
 import App from './views';
 
+let modal = false;
+
 (async () => {
-  render(
-    <App />,
-    global.document.getElementById('root'),
-  );
 
   if (!global.tronWeb) {
     // show alert
+    modal = true;
     console.error('there is no tronlink');
   } else {
     const bets = await getBets();
@@ -28,6 +27,11 @@ import App from './views';
     loadMyBets(bets.data);
     loadMyRequests(bets.data);
   }
+
+  render(
+      <App modal={modal}/>,
+      global.document.getElementById('root'),
+  );
 })();
 
 if (module.hot) {
