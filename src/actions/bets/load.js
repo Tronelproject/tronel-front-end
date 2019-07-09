@@ -7,7 +7,7 @@ export default (bets) => {
     bets: bets.filter(
       bet => bet.creator !== global.tronWeb.defaultAddress.base58
       && !bets.done
-      && !bet.disable
+      && !bet.disabled
       && bet.acceptor === 'T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb',
     ),
   });
