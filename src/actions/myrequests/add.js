@@ -10,7 +10,7 @@ export default async (details) => {
 
     res = await factory.createBet(
       details.currency,
-      details.predictionPrice,
+      details.predictionPrice * 10000,
       Math.floor(details.specifiedDate / 1000),
       Math.floor(details.lockTime / 1000),
       details.predictionType,
