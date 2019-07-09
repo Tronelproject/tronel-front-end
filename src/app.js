@@ -41,7 +41,16 @@ async function loadAllStuff() {
   }, 2000);
 }
 
+const sleep = time => new Promise(resolve => setTimeout(resolve, time));
+
 (async () => {
+  render(
+    <App />,
+    global.document.getElementById('root'),
+  );
+
+  await sleep(700);
+
   let interval;
   if (!global.tronWeb || !global.tronWeb.ready) {
     store.dispatch({
@@ -62,11 +71,6 @@ async function loadAllStuff() {
   } else {
     await loadAllStuff();
   }
-
-  render(
-    <App />,
-    global.document.getElementById('root'),
-  );
 })();
 
 if (module.hot) {
