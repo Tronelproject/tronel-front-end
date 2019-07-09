@@ -80,18 +80,29 @@ class CreateRequests extends Component {
       predictType: predictType,
       specifiedDate: this.state.specifiedDate,
       specifiedTime: this.state.specifiedTime,
-      expirationType: this.state.selectedDateValue,
       expirationDate: this.state.expirationDate,
       expirationTime: this.state.expirationTime,
       betAmount: this.state.betAmount,
     };
 
+    const msd = this.state.specifiedDate.clone();
+    msd.set({
+      hour: this.state.specifiedTime.hour(),
+      minute: this.state.specifiedTime.minute(),
+    });
+
+    const med = this.state.expirationDate.clone();
+    med.set({
+      hour: this.state.expirationTime.hour(),
+      minute: this.state.expirationTime.minute(),
+    });
+
     addBet({
       currency: this.state.currencyKey,
       predictionPrice: this.state.predictPrice,
       predictionType: predictType,
-      specifiedDate: this.state.specifiedDate.toDate().getTime(),
-      lockTime: this.state.expirationDate.toDate().getTime(),
+      specifiedDate: msd.toDate().getTime(),
+      lockTime: med.toDate().getTime(),
       betAmount: this.state.betAmount,
     });
   };
@@ -221,31 +232,6 @@ class CreateRequests extends Component {
                         <div
                             className="col-xl-6 col-lg-9 col-md-10 col-sm-12 col-12 radio-group-section">
                           <h6 className="block-title">Expiration date:</h6>
-                          <RadioGroup
-                              name="date"
-                              selectedValue={this.state.selectedDateValue}
-                              onChange={this.handleDateChange}>
-                            <label className="radio mt-4">
-                              <Radio value="15min"/>
-                              <span>15 Min</span>
-                            </label>
-                            <label className="radio mt-4">
-                              <Radio value="1hour"/>
-                              <span>1 Hour</span>
-                            </label>
-                            <label className="radio mt-4">
-                              <Radio value="12hour"/>
-                              <span>12 Hour</span>
-                            </label>
-                            <label className="radio mt-4">
-                              <Radio value="2month"/>
-                              <span>2 Month</span>
-                            </label>
-                            <label className="radio mt-4">
-                              <Radio value="custom"/>
-                              <span>Custom date (UTC)</span>
-                            </label>
-                          </RadioGroup>
                         </div>
                       </div>
                       {/*custom date*/}

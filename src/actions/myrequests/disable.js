@@ -5,7 +5,6 @@ import config from 'Root/config';
 
 export default async (id) => {
   const contractIndex = store.getState().myrequests.find(i => i._id === id).contractIndex;
-  console.log(contractIndex);
   try {
     const factory = await global.tronWeb.contract().at(config.factory);
     await factory.disableBet(contractIndex).send({
