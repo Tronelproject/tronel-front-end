@@ -219,12 +219,13 @@ class AcceptList extends Component {
               the
               acceptor user in the bet gets 500 TRX and is the winner.
             </p>
-            <p
+            <button
               onClick={() => { acceptBet(this.props.list._id) }}
               className={classNames(styles.btn, 'btn mt-2 ssss')}
-              >
-              safa
-            </p>
+            >
+              <span className="icon-checked pr-2"/>
+              Accept
+            </button>
             {/* <p onClick={() => { console.log('here') }} className={classNames(styles.btn, 'btn mt-2 ssss')}>
               <span className="icon-checked pr-2"/>
               Accept

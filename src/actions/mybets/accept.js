@@ -9,7 +9,7 @@ export default async (id) => {
 
   try {
     const factory = await global.tronWeb.contract().at(config.factory);
-    await factory.join(bet.contractIndex).send({
+    await factory.accept(bet.contractIndex).send({
       callValue: bet.betAmount,
       shouldPollResponse: true,
     });
