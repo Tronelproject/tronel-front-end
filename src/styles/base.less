@@ -51,6 +51,9 @@ a {
   font-weight: 300;
   color: white;
   font-size: 30px;
+  @media (max-width: 575px) {
+    font-size: 23px;
+  }
 }
 
 .body-padding {
@@ -168,6 +171,9 @@ a {
     border: 1px solid @secondary-light-gray;
     padding-top: 28px;
     padding-bottom: 28px;
+    @media (max-width: 578px) {
+      padding-bottom: 21px !important;
+    }
   }
 
   ul.list-group > li:first-child {
@@ -214,6 +220,10 @@ a {
 
   .block-type-win {
     color: @nasty-green;
+  }
+
+  .block-type-pending {
+    color: @macaroni-and-cheese;
   }
 
   ul > li.border-top-less, ul > li.border-bottom-less {
@@ -406,5 +416,11 @@ a {
 }
 
 input:disabled {
-  cursor: not-allowed!important;
+  cursor: not-allowed !important;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

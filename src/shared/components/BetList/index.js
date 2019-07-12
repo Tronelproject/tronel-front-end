@@ -1,11 +1,13 @@
 import React, {Component, Fragment} from 'react';
 import moment from 'moment';
 import CopyText from 'Root/shared/components/CopyText';
-import binanceCoin from 'Root/assets/images/binance-coin-logo.png';
 import bitCoin from 'Root/assets/images/bitcoin.png';
 import ethereum from 'Root/assets/images/ethereum.png';
+import tron from 'Root/assets/images/tron.png';
 import classNames from 'classnames';
 import styles from './styles.less';
+
+let state = null;
 
 class BetList extends Component {
   state = {};
@@ -15,15 +17,54 @@ class BetList extends Component {
       return bitCoin;
     }
     if (currency === 'tron') {
-      return binanceCoin;
+      return tron;
     }
     if (currency === 'ethereum') {
       return ethereum;
     }
   };
 
+  checkState(won, lost, pending) {
+    if (this.props.list.done) {
+      state = pending;
+    } else {
+      if (this.props.list.creator === global.tronWeb.defaultAddress.base58) {
+        if (this.props.list.predictionType === 1) {
+          if (this.props.list.submittedPrice >=
+              this.props.list.predictionPrice) {
+            state = won;
+          } else {
+            state = lost;
+          }
+        } else {
+          if (this.props.list.submittedPrice <
+              this.props.list.predictionPrice) {
+            state = won;
+          } else {
+            state = lost;
+          }
+        }
+      } else {
+        if (this.props.list.predictionType === 1) {
+          if (this.props.list.submittedPrice >=
+              this.props.list.predictionPrice) {
+            state = lost;
+          } else {
+            state = won;
+          }
+        } else {
+          if (this.props.list.submittedPrice <
+              this.props.list.predictionPrice) {
+            state = won;
+          } else {
+            state = won;
+          }
+        }
+      }
+    }
+  }
+
   render() {
-    let state = null;
     const won = (
         <p className="block-type block-type-win text-center mb-4">You Win</p>
     );
@@ -31,29 +72,30 @@ class BetList extends Component {
     const lost = (
         <p className="block-type block-type-lose text-center mb-4">You Lose</p>
     );
-    if (this.props.list.predictionType === 1) {
-      if (this.props.list.submittedPrice >= this.props.list.predictionPrice) {
-        state = won;
-      } else {
-        state = lost;
-      }
-    } else {
-      if (this.props.list.submittedPrice < this.props.list.predictionPrice) {
-        state = won;
-      } else {
-        state = lost;
-      }
-    }
+
+    const pending = (
+        <p className="block-type block-type-pending text-center mb-4">Pending</p>
+    );
+
+    this.checkState(won, lost, pending);
 
     let newList = null;
     const trx = 1000000;
+    const priceAmount = 10000;
+    let predictText = (<span>Greater than or equal</span>);
+    if (this.props.list.predictionType === 0) {
+      predictText = (<span>Lesser than or equal</span>);
+    }
     const cryptocurrency = (
         <div className="row">
-          <div className="col-4 p-v-center">
+          <div
+              className="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12 p-v-center">
             <h6 className="block-tile-lighter c-v-center mb-0">Cryptocurrency
               :</h6>
           </div>
-          <div className="col-8 text-right">
+          <div className="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-12
+               mt-xl-0 mt-lg-0 mt-md-0 mt-sm-0 mt-3
+              text-xl-right text-lg-right text-md-right text-sm-right text-left">
             <img src={this.checkImage(this.props.list.currency)}
                  width="33px"
                  height="33px"
@@ -63,26 +105,33 @@ class BetList extends Component {
     );
     const amount = (
         <div className="row">
-          <div className="col-4 p-v-center">
+          <div
+              className="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12 p-v-center">
             <h6 className="block-tile-lighter c-v-center mb-0">Predicted
               Price :</h6>
           </div>
-          <div className="col-8 text-right">
-            <h6 className="info-list-text mb-0">Greater than or
-              equal ${this.props.list.predictionPrice}</h6>
+          <div className="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-12
+               mt-xl-0 mt-lg-0 mt-md-0 mt-sm-0 mt-3">
+            <h6 className="info-list-text mb-0
+            text-xl-right text-lg-right text-md-right text-sm-right text-left">
+              {predictText}{' '}
+              ${this.props.list.predictionPrice / priceAmount}</h6>
           </div>
         </div>
     );
 
     const predicted = (
         <div className="row">
-          <div className="col-4 p-v-center">
+          <div
+              className="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12 p-v-center">
             <h6 className="block-tile-lighter c-v-center mb-0">Amount of
               bet
               :</h6>
           </div>
-          <div className="col-8 text-right">
-            <h6 className="info-list-text mb-0">
+          <div className="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-12
+               mt-xl-0 mt-lg-0 mt-md-0 mt-sm-0 mt-3">
+            <h6 className="info-list-text mb-0
+            text-xl-right text-lg-right text-md-right text-sm-right text-left">
               {this.props.list.betAmount / trx}
               <span className="info-list-text-suffix pl-1">TRX</span>
             </h6>
@@ -92,15 +141,20 @@ class BetList extends Component {
 
     const date = (
         <div className="row">
-          <div className="col-4 p-v-center">
+          <div
+              className="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12 p-v-center">
             <h6 className="block-tile-lighter c-v-center mb-0">Specified
               Date :</h6>
           </div>
-          <div className="col-8 text-right">
-            <h6 className="info-list-text mb-0">
-               <span className="pr-2">{moment.unix(this.props.list.specifiedDate).
+          <div className="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-12
+               mt-xl-0 mt-lg-0 mt-md-0 mt-sm-0 mt-3">
+            <h6 className="info-list-text mb-0
+            text-xl-right text-lg-right text-md-right text-sm-right text-left">
+               <span className="pr-2">{moment.unix(
+                   this.props.list.specifiedDate).
                    format('YYYY/MM/DD')}</span>|
-              <span className="pl-2">{moment.unix(this.props.list.specifiedDate).
+              <span className="pl-2">{moment.unix(
+                  this.props.list.specifiedDate).
                   format('HH:mm')}</span>
             </h6>
           </div>
@@ -181,47 +235,56 @@ class BetList extends Component {
             <ul className="list-group list-group-flush border-0">
               <li className="list-group-item px-0">
                 <div className="row">
-                  <div className="col-4 p-v-center">
-                    <h6 className="block-tile-lighter c-v-center mb-0">Contract
-                      hash
-                      :</h6>
+                  <div
+                      className="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12 p-v-center">
+                    <h6 className="block-tile-lighter c-v-center mb-0">Bet
+                      ID :</h6>
                   </div>
-                  <div className="col-8 text-right">
+                  <div
+                      className="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-12 mt-xl-0 mt-lg-0 mt-md-0 mt-sm-0 mt-3">
                           <span
                               className={classNames(styles.copy, styles.address,
-                                  'pl-2')}>
+                                  'pl-xl-2 pl-lg-2 pl-md-2 pl-sm-2 pl-0' +
+                                  'text-xl-right text-lg-right text-md-right text-sm-right text-left')}>
                               {this.props.list._id.slice(0, 21)}...
                               <span className="pl-3">
                               <CopyText text={this.props.list._id}/>
                               </span>
                           </span>
                     <span className={classNames(styles.copy,
-                        styles['small-address'], 'pl-2')}>
-                              {this.props.list._id.slice(0, 10)}...
-                              <span className="pl-3">
-                              <CopyText text={this.props.list._id}/>
-                              </span>
-                          </span>
+                        styles['small-address'],
+                        'pl-xl-2 pl-lg-2 pl-md-2 pl-sm-2 pl-0' +
+                        'text-xl-right text-lg-right text-md-right text-sm-right text-left')}>
+                                    {this.props.list._id.slice(0, 10)}...
+                                    <span className="pl-3">
+                                    <CopyText text={this.props.list._id}/>
+                                    </span>
+                                </span>
                   </div>
                 </div>
               </li>
               <li className="list-group-item px-0">
                 <div className="row">
-                  <div className="col-4 p-v-center">
+                  <div
+                      className="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12 p-v-center">
                     <h6 className="block-tile-lighter c-v-center mb-0">Requester
                       :</h6>
                   </div>
-                  <div className="col-8 text-right">
+                  <div
+                      className="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-12 mt-xl-0 mt-lg-0 mt-md-0 mt-sm-0 mt-3">
                           <span
                               className={classNames(styles.copy, styles.address,
-                                  'pl-2')}>
+                                  'pl-xl-2 pl-lg-2 pl-md-2 pl-sm-2 pl-0' +
+                                  'text-xl-right text-lg-right text-md-right text-sm-right text-left')}>
                               {this.props.list.creator.slice(0, 21)}...
                               <span className="pl-3">
                               <CopyText text={this.props.list.creator}/>
                               </span>
                           </span>
                     <span className={classNames(styles.copy,
-                        styles['small-address'], 'pl-2')}>
+                        styles['small-address'],
+                        'pl-xl-2 pl-lg-2 pl-md-2 pl-sm-2 pl-0' +
+                        'text-xl-right text-lg-right text-md-right text-sm-right text-left')}>
                               {this.props.list.creator.slice(0, 10)}...
                               <span className="pl-3">
                               <CopyText text={this.props.list.creator}/>
@@ -232,21 +295,26 @@ class BetList extends Component {
               </li>
               <li className="list-group-item px-0">
                 <div className="row">
-                  <div className="col-4 p-v-center">
+                  <div
+                      className="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12 p-v-center">
                     <h6 className="block-tile-lighter c-v-center mb-0">Acceptor
                       :</h6>
                   </div>
-                  <div className="col-8 text-right">
+                  <div
+                      className="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-12 mt-xl-0 mt-lg-0 mt-md-0 mt-sm-0 mt-3">
                           <span
                               className={classNames(styles.copy, styles.address,
-                                  'pl-2')}>
+                                  'pl-xl-2 pl-lg-2 pl-md-2 pl-sm-2 pl-0' +
+                                  'text-xl-right text-lg-right text-md-right text-sm-right text-left')}>
                               {this.props.list.acceptor.slice(0, 21)}...
                               <span className="pl-3">
                               <CopyText text={this.props.list.acceptor}/>
                               </span>
                           </span>
                     <span className={classNames(styles.copy,
-                        styles['small-address'], 'pl-2')}>
+                        styles['small-address'],
+                        'pl-xl-2 pl-lg-2 pl-md-2 pl-sm-2 pl-0' +
+                        'text-xl-right text-lg-right text-md-right text-sm-right text-left')}>
                               {this.props.list.acceptor.slice(0, 10)}...
                               <span className="pl-3">
                               <CopyText text={this.props.list.acceptor}/>
@@ -258,11 +326,12 @@ class BetList extends Component {
               {newList}
             </ul>
             <p className="block-complete-info mb-4">
-              At the 2019/05/12|12:00 UTC if the BNB price is greater than or
-              equal
-              30$, the requester user is the winner and gets 500 TRX, otherwise
-              the
-              acceptor user in the bet gets 500 TRX and is the winner.
+              At the {moment.unix(this.props.list.specifiedDate).format('YYYY/MM/DD')} |
+              {' '}{moment.unix(this.props.list.specifiedDate).format('HH:mm')}
+              {' '}if the {this.props.list.currency} price is
+              {' '}{predictText}{' '}${this.props.list.predictionPrice / priceAmount},
+              the requester user is the winner and gets {this.props.list.betAmount / trx} TRX, otherwise the
+              acceptor user in the bet gets {this.props.list.betAmount / trx} TRX and is the winner.
             </p>
             {state}
           </div>

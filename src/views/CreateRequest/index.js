@@ -28,8 +28,8 @@ class CreateRequests extends Component {
 
   componentDidMount() {
     this.setState({date: moment().format('YYYY/MM/DD')});
-    console.warn(moment().format('YYYY/MM/DD'));
-    console.warn(moment().endOf('day'));
+    // console.warn(moment().format('YYYY/MM/DD'));
+    // console.warn(moment().endOf('day'));
   }
 
   handleSelect = ({key}) => {
@@ -46,6 +46,38 @@ class CreateRequests extends Component {
     this.setState({selectedDateValue: value});
   };
 
+  range = (start, end) => {
+    const result = [];
+    for (let i = start; i < end; i++) {
+      result.push(i);
+    }
+    return result;
+  };
+
+  disabledHours = () => {
+    const hours = this.range(0, 60);
+    const currentHour = moment.utc().format('HH');
+    hours.splice(currentHour, 24 - currentHour);
+    return hours;
+  };
+
+  disabledMinutes = () => {
+    const currentMinutes = moment.utc().format('mm');
+    return this.range(0, currentMinutes);
+  };
+
+  disabledExpirationHours = () => {
+    const hours = this.range(0, 60);
+    const currentHour = moment.utc().format('HH');
+    hours.splice(0, currentHour);
+    return hours;
+  };
+
+  disabledExpirationMinutes = () => {
+    const currentMinutes = moment.utc().format('mm');
+    return this.range((currentMinutes) - 1, 59);
+  };
+
   onChangeSpecifiedDate = (date, dateString) => {
     // console.log(date, dateString);
     this.setState({specifiedDate: date});
@@ -58,12 +90,14 @@ class CreateRequests extends Component {
   };
 
   disabledSpecifiedDate = (current) => {
-    return current && current < moment().endOf('day');
+    // console.warn(moment.utc().format('HH:mm:ss'));
+    return current && current < moment().endOf('day').subtract(1, 'd');
   };
 
   disabledExpirationDate = (current) => {
     if (this.state.specifiedDate) {
-      return current > this.state.specifiedDate;
+      return current < moment().endOf('day').subtract(1, 'd') ||
+          current > this.state.specifiedDate;
     } else {
       return current && current > moment().endOf('day');
     }
@@ -133,7 +167,8 @@ class CreateRequests extends Component {
                       <div className="row">
                         <div
                             className="col-xl-6 col-lg-9 col-md-10 col-sm-12 col-12 pr-xl-5 pr-lg-5">
-                          <h6 className="block-title">Select a currency</h6>
+                          <h6 className="block-title">Select a
+                            cryptocurrency</h6>
                           <DropDown menu={menu} title={this.state.currency}/>
                         </div>
                       </div>
@@ -141,86 +176,107 @@ class CreateRequests extends Component {
                       <div className="row mt-4 pt-3">
                         <div
                             className="col-xl-6 col-lg-9 col-md-10 col-sm-12 col-12 pr-xl-5 pr-lg-5">
-                          <h6 className="block-title">Predict price:</h6>
+                          <h6 className="block-title">Prediction price:</h6>
                           <div className="row mt-2">
-                            <div
-                                className="col-xl-5 col-lg-5 col-sm-5 col-md-5 col-sm-5 col-6 radio-group-section">
+                            <div className="radio-group-section
+                                 w-100 px-3">
                               <RadioGroup
                                   name="predictPrice"
                                   selectedValue={this.state.selectedPredictValue}
                                   onChange={this.handlePredictChange}>
-                                <label className="radio mt-2 pt-1">
-                                  <Radio value="predictGreater"/>
-                                  <span>Greater and Equal</span>
-                                </label>
-                                <label className="radio mt-4 pt-2">
-                                  <Radio value="predictLesser"/>
-                                  <span>Lesser and Equal</span>
-                                </label>
+                                <div className="row">
+                                  <div
+                                      className="col-xl-5 col-lg-5 col-md-5 col-sm-5 col-12">
+                                    <label className="radio mt-2 pt-1">
+                                      <Radio value="predictGreater"/>
+                                      <span>Greater and Equal</span>
+                                    </label>
+                                  </div>
+                                  <div
+                                      className="col-xl-7 col-lg-7 col-md-7 col-sm-7 col-12 simple-input-group">
+                                    <div className="input-group ">
+                                      <input type="number"
+                                             onChange={(event) => {
+                                               this.setState(
+                                                   {predictPrice: event.target.value});
+                                             }}
+                                             pattern="[0-9]*"
+                                             className="form-control"
+                                             disabled={this.state.selectedPredictValue ===
+                                             'predictLesser'}
+                                             placeholder="predict greater"/>
+                                      <div className="input-group-prepend">
+                                        <div className="input-group-text">$
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="row mt-3">
+                                  <div
+                                      className="col-xl-5 col-lg-5 col-md-5 col-sm-5 col-12">
+                                    <label className="radio mt-2 pt-1">
+                                      <Radio value="predictLesser"/>
+                                      <span>Lesser and Equal</span>
+                                    </label>
+                                  </div>
+                                  <div
+                                      className="col-xl-7 col-lg-7 col-md-7 col-sm-7 col-12 simple-input-group">
+                                    <div className="input-group">
+                                      <input type="number"
+                                             onChange={(event) => {
+                                               this.setState(
+                                                   {predictPrice: event.target.value});
+                                             }}
+                                             pattern='[0-9]*'
+                                             className='form-control'
+                                             disabled={this.state.selectedPredictValue ===
+                                             'predictGreater'}
+                                             placeholder='predict lesser'/>
+                                      <div className='input-group-prepend'>
+                                        <div className='input-group-text'>$
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
                               </RadioGroup>
                             </div>
-                            <div
-                                className="col-xl-7 col-lg-7 col-md-7 col-sm-7 col-6">
-                              <div className="row simple-input-group">
-                                <div className="col-12 pl-0">
-                                  <div className="input-group ">
-                                    <input type="text"
-                                           onChange={(event) => {
-                                             this.setState(
-                                                 {predictPrice: event.target.value});
-                                           }}
-                                           pattern="[0-9]*"
-                                           className="form-control"
-                                           disabled={this.state.selectedPredictValue ===
-                                           'predictLesser'}
-                                           placeholder="predict greater"/>
-                                    <div className="input-group-prepend">
-                                      <div className="input-group-text">$</div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="col-12 mt-2 pl-0">
-                                  <div className="input-group">
-                                    <input type="text"
-                                           onChange={(event) => {
-                                             this.setState(
-                                                 {predictPrice: event.target.value});
-                                           }}
-                                           pattern='[0-9]*'
-                                           className='form-control'
-                                           disabled={this.state.selectedPredictValue ===
-                                           'predictGreater'}
-                                           placeholder='predict lesser'/>
-                                    <div className='input-group-prepend'>
-                                      <div className='input-group-text'>$</div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
+                            {/*<div*/}
+                            {/*className="col-xl-7 col-lg-7 col-md-7 col-sm-7 col-12">*/}
+                            {/*<div className="row simple-input-group">*/}
+                            {/*<div className="col-12 pl-0">*/}
+                            {/**/}
+                            {/*</div>*/}
+                            {/*<div className="col-12 mt-2 pl-0">*/}
+                            {/*</div>*/}
+                            {/*</div>*/}
+                            {/*</div>*/}
                           </div>
                         </div>
                       </div>
                       {/*specified date*/}
                       <div className="row mt-4 pt-2">
                         <div className="col-12">
-                          <h6 className="block-title">Specified date (UTC)</h6>
+                          <h6 className="block-title">Specified date</h6>
                         </div>
                       </div>
                       <div
                           className={classNames(styles['date-section'], 'row')}>
                         <div
                             className='col-xl-3 col-lg-4 col-md-5 col-sm-6 col-6 pr-xl-4'>
-                          {/*disabledDate={this.disabledSpecifiedDate}*/}
                           <DatePicker
                               onChange={this.onChangeSpecifiedDate}
-                              format='YYYY-MM-DD'
+                              disabledDate={this.disabledSpecifiedDate}
+                              format={dateFormat}
                               className={styles.time}/>
                         </div>
                         <div className="col-xl-3 col-lg-4 col-md-5 col-sm-6 col-6
                                              pr-xl-5  pl-xl-0 ">
                           <TimePicker
                               format={format}
+                              disabledHours={this.disabledHours}
+                              disabledMinutes={this.disabledMinutes}
                               onChange={(time) => {
                                 this.setState({specifiedTime: time});
                               }}
@@ -235,17 +291,16 @@ class CreateRequests extends Component {
                         </div>
                       </div>
                       {/*custom date*/}
-                      <div className={classNames(
-                          styles['date-section'],
-                          'row mt-3')}>
+                      <div
+                          className={classNames(styles['date-section'], 'row')}>
                         <div
                             className="col-xl-3 col-lg-4 col-md-5 col-sm-6 col-6 pr-xl-4">
-                          {/*disabledDate={this.disabledExpirationDate}*/}
                           <DatePicker
                               onChange={this.onChangeExpirationDate}
                               disabled={this.state.selectedDateValue !==
                               'custom'}
                               format={dateFormat}
+                              disabledDate={this.disabledExpirationDate}
                               className={styles.time}/>
                         </div>
                         <div className="col-xl-3 col-lg-4 col-md-5 col-sm-6 col-6
@@ -254,6 +309,8 @@ class CreateRequests extends Component {
                               format={format}
                               disabled={this.state.selectedDateValue !==
                               'custom'}
+                              disabledHours={this.disabledExpirationHours}
+                              disabledMinutes={this.disabledExpirationMinutes}
                               onChange={(time) => {
                                 this.setState({expirationTime: time});
                               }}
@@ -266,8 +323,12 @@ class CreateRequests extends Component {
                          pr-xl-5 pr-lg-5 simple-input-group">
                           <h6 className="block-title">Amount bet</h6>
                           <div className="input-group ">
-                            <input type="text"
-                                   onChange={(event) => {this.setState({betAmount: parseInt(event.target.value)})}}
+                            <input type="number"
+                                   onChange={(event) => {
+                                     this.setState({
+                                       betAmount: parseInt(event.target.value),
+                                     });
+                                   }}
                                    pattern="[0-9]*"
                                    className="form-control"
                                    placeholder="amount"/>

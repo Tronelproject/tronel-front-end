@@ -24,14 +24,23 @@ class Explorer extends Component {
   };
 
   componentDidMount() {
+    if (localStorage.getItem('explorerLayout')) {
+      if (localStorage.getItem('explorerLayout') === 'horizontally') {
+        this.showHorizontally();
+      } else {
+        this.showVertically();
+      }
+    }
   }
 
   showHorizontally = () => {
     this.setState({vertically: false, horizontally: true});
+    localStorage.setItem('explorerLayout', 'horizontally');
   };
 
   showVertically = () => {
     this.setState({vertically: true, horizontally: false});
+    localStorage.setItem('explorerLayout', 'vertically');
   };
 
   handleSelect = ({key}) => {
@@ -86,17 +95,17 @@ class Explorer extends Component {
                     horizontallyHandler={this.showHorizontally}
                     verticallyHandler={this.showVertically}/>
                 <div className="row mt-4">
-                  <div className="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6
-                                  pr-xl-1 pr-lg-1 pr-md-2 pr-sm-2 pr-2">
+                  <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12
+                                  pr-xl-1 pr-lg-1 pr-md-2">
                     <div className="card block-padding">
                       <h6 className="block-title">
-                        Currency
+                        Cryptocurrency
                       </h6>
                       <DropDown menu={menu} title={this.state.currency}/>
                     </div>
                   </div>
-                  <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-6
-                                  px-xl-1 px-lg-1 pl-md-2 pl-sm-2 pl-2">
+                  <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12
+                                  px-xl-1 px-lg-1 pl-md-2 mt-xl-0 mt-lg-0 mt-md-0 mt-sm-3 mt-3">
                     <div className="card block-padding">
                       <h6 className="block-title pb-2">
                         Amount of bet
@@ -126,16 +135,19 @@ class Explorer extends Component {
                                   pl-xl-1 pl-lg-1
                                   mt-xl-0 mt-lg-0 mt-md-3 mt-sm-3 mt-3">
                     <div className="card block-padding">
-                      <h6 className="block-title">Form number</h6>
+                      <h6 className="block-title">Bet ID</h6>
                       <div className="row">
                         <div
-                            className="col-xl-8 col-lg-8 col-md-9 col-sm-9 col-9 pr-0">
+                            className="col-xl-8 col-lg-8 col-md-9 col-sm-12 col-12
+                            pr-xl-0 pr-lg-0 pr-md-0">
                           <input className="form-control simple-form"
                                  pattern="[A-Za-z]"
                                  type="text"
                                  placeholder="Enter your form number"/>
                         </div>
-                        <div className="col-3 text-right">
+                        <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12
+                             text-xl-right text-lg-right text-md-right text-sm-left
+                             text-left mt-xl-0 mt-lg-0 mt-md-0 mt-sm-2 mt-2">
                           <button className="btn simple-btn">Search</button>
                         </div>
                       </div>
@@ -144,7 +156,7 @@ class Explorer extends Component {
                 </div>
                 <div className="row mt-4">
                   {this.props.bets.map((list, index) => (
-                      <div className={column}>
+                      <div className={column} key={index}>
                         <div className={this.isEven(index) ?
                             leftColDiv :
                             rightColDiv}>

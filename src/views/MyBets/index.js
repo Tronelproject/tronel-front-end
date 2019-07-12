@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import Header from 'Root/shared/components/Header';
 import PageTitle from 'Root/shared/components/PageTitle';
 import BetList from 'Root/shared/components/BetList';
@@ -11,12 +11,24 @@ class MyBets extends Component {
     vertically: true,
   };
 
+  componentDidMount() {
+    if (localStorage.getItem('betsLayout')) {
+      if (localStorage.getItem('betsLayout') === 'horizontally') {
+        this.showHorizontally();
+      } else {
+        this.showVertically();
+      }
+    }
+  }
+
   showHorizontally = () => {
     this.setState({vertically: false, horizontally: true});
+    localStorage.setItem('betsLayout', 'horizontally');
   };
 
   showVertically = () => {
     this.setState({vertically: true, horizontally: false});
+    localStorage.setItem('betsLayout', 'vertically');
   };
 
   isEven = (index) => {
@@ -58,16 +70,20 @@ class MyBets extends Component {
                       <div className="row">
                         <div
                             className="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
-                          <h6 className="block-title">Form number</h6>
+                          <h6 className="block-title">Bet ID</h6>
                           <div className="row">
                             <div
-                                className="col-xl-7 col-lg-7 col-md-9 col-sm-9 col-9 pr-0">
+                                className="col-xl-7 col-lg-7 col-md-9 col-sm-9 col-12
+                                pr-xl-0 pr-lg-0 pr-md-0 pr-sm-0">
                               <input className="form-control simple-form"
                                      pattern="[A-Za-z]"
                                      type="text"
                                      placeholder="Enter your form number"/>
                             </div>
-                            <div className="col-3 text-right pl-xl-4 pl-lg-4">
+                            <div className="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12
+                             text-xl-right text-lg-right text-md-right text-sm-right text-left
+                             mt-xl-0 mt-lg-0 mt-md-0 mt-sm-0 mt-2
+                             pl-xl-4 pl-lg-4">
                               <button
                                   className="btn simple-btn ml-xl-2 ml-lg-2">Search
                               </button>
