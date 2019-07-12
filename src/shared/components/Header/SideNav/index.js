@@ -12,13 +12,13 @@ import {
   myBetRoute,
   myRequestRoute,
 } from 'Root/constants/routes';
+import { connect } from 'react-redux';
 
 class SideNav extends Component {
   state = {
     sidebarOpen: false,
     collapse: true,
     rotate: false,
-    address: 'TJWzn8rjLYbfS3hcAVVscLeERUs6rfMoA5',
   };
 
   onSetSidebarOpen = (open) => {
@@ -41,7 +41,7 @@ class SideNav extends Component {
                         </div>
                         <div className="col-6">
                           <div className={styles['balance-box']}>
-                            <h6 className={styles.trx}>100 TRX</h6>
+                            <h6 className={styles.trx}>{(this.props.user.balance / 1000000).toFixed(2)} TRX</h6>
                             <h6 className={styles.balance}>
                                 <span>
                                   <img src={diamonds}
@@ -104,7 +104,7 @@ class SideNav extends Component {
                       <div className="row mt-1">
                         <div className="col-12">
                           <h6 className={classNames(styles.copy)}>
-                            {this.state.address}
+                            {this.props.user.address}
                           </h6>
                         </div>
                       </div>
@@ -134,4 +134,4 @@ class SideNav extends Component {
   }
 }
 
-export default SideNav;
+export default connect(state => ({ user: state.user }))(SideNav);
