@@ -56,26 +56,46 @@ class CreateRequests extends Component {
 
   disabledHours = () => {
     const hours = this.range(0, 60);
-    const currentHour = moment.utc().format('HH');
-    hours.splice(currentHour, 24 - currentHour);
+    const specify = moment(this.state.specifiedDate).format('YYYY/MM/DD');
+    const current = moment().endOf('day').format('YYYY/MM/DD');
+    if (specify === current) {
+      const currentHour = moment.utc().format('HH');
+      hours.splice(currentHour, 24 - currentHour);
+    } else {
+      hours.splice(0, 24);
+    }
     return hours;
   };
 
   disabledMinutes = () => {
-    const currentMinutes = moment.utc().format('mm');
-    return this.range(0, currentMinutes);
+    const specify = moment(this.state.specifiedDate).format('YYYY/MM/DD');
+    const current = moment().endOf('day').format('YYYY/MM/DD');
+    if (specify === current) {
+      const currentMinutes = moment.utc().format('mm');
+      return this.range(0, currentMinutes);
+    }
   };
 
   disabledExpirationHours = () => {
     const hours = this.range(0, 60);
-    const currentHour = moment.utc().format('HH');
-    hours.splice(0, currentHour);
+    const expire = moment(this.state.expirationDate).format('YYYY/MM/DD');
+    const current = moment().endOf('day').format('YYYY/MM/DD');
+    if (expire === current) {
+      const currentHour = moment.utc().format('HH');
+      hours.splice(0, currentHour);
+    } else {
+      hours.splice(0, 24);
+    }
     return hours;
   };
 
   disabledExpirationMinutes = () => {
+    const expire = moment(this.state.expirationDate).format('YYYY/MM/DD');
+    const current = moment().endOf('day').format('YYYY/MM/DD');
     const currentMinutes = moment.utc().format('mm');
-    return this.range((currentMinutes) - 1, 59);
+    if (expire === current) {
+      return this.range((currentMinutes) - 1, 59);
+    }
   };
 
   onChangeSpecifiedDate = (date, dateString) => {
