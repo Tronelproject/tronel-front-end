@@ -10,10 +10,6 @@ import styles from './styles.less';
 
 const Range = createSliderWithTooltip(Slider.Range);
 
-function range(e) {
-  console.log(e);
-}
-
 class Explorer extends Component {
 
   state = {
@@ -21,9 +17,12 @@ class Explorer extends Component {
     vertically: true,
     currency: 'All',
     currencyKey: 'all',
+    betID: '',
+    bets: [],
   };
 
   componentDidMount() {
+    this.setState({bets: [...this.props.bets]});
     if (localStorage.getItem('explorerLayout')) {
       if (localStorage.getItem('explorerLayout') === 'horizontally') {
         this.showHorizontally();
@@ -31,6 +30,10 @@ class Explorer extends Component {
         this.showVertically();
       }
     }
+  }
+
+  componentWillReceiveProps(nextProps, nextContext) {
+    this.setState({bets: [...nextProps.bets]});
   }
 
   showHorizontally = () => {
@@ -48,7 +51,41 @@ class Explorer extends Component {
       currency: key.charAt(0).toUpperCase() + key.slice(1),
       currencyKey: key,
     });
-    // console.warn(key);
+    if (key === 'all') {
+      this.setState(
+          {bets: [...this.props.bets]},
+      );
+    } else {
+      this.setState(
+          {
+            bets: this.props.bets.filter(
+                bet => bet.currency === key),
+          },
+      );
+    }
+  };
+
+  range = (e) => {
+    const trx = 1000000;
+    this.setState(
+        {
+          bets: this.props.bets.filter(
+              bet => ((bet.betAmount / trx) >= e[0])
+                  && ((bet.betAmount / trx) <= e[1])),
+        },
+    );
+  };
+
+  onFindByBetId = () => {
+    if (this.state.betID.length > 0) {
+      this.setState(
+          {bets: this.props.bets.filter(bet => bet._id === this.state.betID)},
+      );
+    } else {
+      this.setState(
+          {bets: [...this.props.bets]},
+      );
+    }
   };
 
   isEven = (index) => {
@@ -59,6 +96,7 @@ class Explorer extends Component {
     let column = null;
     let rightColDiv = null;
     let leftColDiv = null;
+    console.warn(this.state.bets);
 
     if (this.state.horizontally) {
       column = 'col-12 mt-4';
@@ -110,7 +148,9 @@ class Explorer extends Component {
                       <h6 className="block-title pb-2">
                         Amount of bet
                       </h6>
-                      <Range onChange={range}
+                      <Range onChange={(event) => {
+                        this.range(event);
+                      }}
                              min={0}
                              max={1000}
                              defaultValue={[200, 500]}
@@ -143,19 +183,24 @@ class Explorer extends Component {
                           <input className="form-control simple-form"
                                  pattern="[A-Za-z]"
                                  type="text"
-                                 placeholder="Enter your form number"/>
+                                 onChange={(event) => {
+                                   this.setState({betID: event.target.value});
+                                 }}
+                                 placeholder="Enter your bet id"/>
                         </div>
                         <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12
                              text-xl-right text-lg-right text-md-right text-sm-left
                              text-left mt-xl-0 mt-lg-0 mt-md-0 mt-sm-2 mt-2">
-                          <button className="btn simple-btn">Search</button>
+                          <button className="btn simple-btn"
+                                  onClick={this.onFindByBetId}>Search
+                          </button>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="row mt-4">
-                  {this.props.bets.map((list, index) => (
+                  {this.state.bets.map((list, index) => (
                       <div className={column} key={index}>
                         <div className={this.isEven(index) ?
                             leftColDiv :

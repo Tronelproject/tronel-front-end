@@ -245,12 +245,16 @@ class AcceptList extends Component {
               {newList}
             </ul>
             <p className="block-complete-info">
-              At the {moment.unix(this.props.list.specifiedDate).format('YYYY/MM/DD')} |
+              At the {moment.unix(this.props.list.specifiedDate).
+                format('YYYY/MM/DD')} |
               {' '}{moment.unix(this.props.list.specifiedDate).format('HH:mm')}
               {' '}if the {this.props.list.currency} price is
-              {' '}{predictText}{' '}${this.props.list.predictionPrice / priceAmount},
-              the requester user is the winner and gets {this.props.list.betAmount / trx} TRX, otherwise the
-              acceptor user in the bet gets {this.props.list.betAmount / trx} TRX and is the winner.
+              {' '}{predictText}{' '}
+              ${this.props.list.predictionPrice / priceAmount},
+              the requester user is the winner and
+              gets {(this.props.list.betAmount / trx) * 2} TRX, otherwise the
+              acceptor user in the bet gets{' '}
+              {(this.props.list.betAmount / trx) * 2} TRX and is the winner.
             </p>
             <button
                 onClick={() => {

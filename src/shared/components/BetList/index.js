@@ -26,8 +26,6 @@ class BetList extends Component {
 
   checkState(won, lost, pending) {
     if (this.props.list.done) {
-      state = pending;
-    } else {
       if (this.props.list.creator === global.tronWeb.defaultAddress.base58) {
         if (this.props.list.predictionType === 1) {
           if (this.props.list.submittedPrice >=
@@ -61,16 +59,18 @@ class BetList extends Component {
           }
         }
       }
+    } else {
+      state = pending;
     }
   }
 
   render() {
     const won = (
-        <p className="block-type block-type-win text-center mb-4">You Win</p>
+        <p className="block-type block-type-win text-center mb-4">You Won</p>
     );
 
     const lost = (
-        <p className="block-type block-type-lose text-center mb-4">You Lose</p>
+        <p className="block-type block-type-lose text-center mb-4">You Lost</p>
     );
 
     const pending = (
@@ -326,12 +326,17 @@ class BetList extends Component {
               {newList}
             </ul>
             <p className="block-complete-info mb-4">
-              At the {moment.unix(this.props.list.specifiedDate).format('YYYY/MM/DD')} |
+              At the {moment.unix(this.props.list.specifiedDate).
+                format('YYYY/MM/DD')} |
               {' '}{moment.unix(this.props.list.specifiedDate).format('HH:mm')}
               {' '}if the {this.props.list.currency} price is
-              {' '}{predictText}{' '}${this.props.list.predictionPrice / priceAmount},
-              the requester user is the winner and gets {this.props.list.betAmount / trx} TRX, otherwise the
-              acceptor user in the bet gets {this.props.list.betAmount / trx} TRX and is the winner.
+              {' '}{predictText}{' '}
+              ${this.props.list.predictionPrice / priceAmount},
+              the requester user is the winner and
+              gets {(this.props.list.betAmount / trx) * 2} TRX, otherwise the
+              acceptor user in the bet gets{' '}
+              {(this.props.list.betAmount / trx) * 2}{' '}
+              TRX and is the winner.
             </p>
             {state}
           </div>
