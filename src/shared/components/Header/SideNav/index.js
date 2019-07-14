@@ -13,7 +13,6 @@ import {
   myBetRoute,
   myRequestRoute,
 } from 'Root/constants/routes';
-import { connect } from 'react-redux';
 
 class SideNav extends Component {
   state = {
@@ -42,14 +41,7 @@ class SideNav extends Component {
                         </div>
                         <div className="col-6">
                           <div className={styles['balance-box']}>
-<<<<<<< HEAD
                             <h6 className={styles.trx}>{(this.props.user.balance / 1000000).toFixed(2)} TRX</h6>
-=======
-                            <h6 className={styles.trx}>
-                              {(this.props.user.balance / 1000000).toFixed(
-                                  2)} TRX
-                            </h6>
->>>>>>> edit
                             <h6 className={styles.balance}>
                                 <span>
                                   <img src={diamonds}
@@ -112,13 +104,9 @@ class SideNav extends Component {
                       <div className="row mt-1">
                         <div className="col-12">
                           <h6 className={classNames(styles.copy)}>
-<<<<<<< HEAD
-                            {this.props.user.address}
-=======
                             {this.props.user.address.length > 27 ?
                                 (this.props.user.address.slice(0, 27) + '...') :
                                 this.props.user.address}
->>>>>>> edit
                           </h6>
                         </div>
                       </div>
@@ -148,8 +136,4 @@ class SideNav extends Component {
   }
 }
 
-<<<<<<< HEAD
 export default connect(state => ({ user: state.user }))(SideNav);
-=======
-export default connect(state => ({user: state.user}))(SideNav);
->>>>>>> edit
