@@ -408,6 +408,10 @@ a {
     padding-right: 15px;
     padding-left: 15px;
   }
+
+  .input-group.input-error {
+    border: 1px solid @faded-red !important;
+  }
 }
 
 .rc-slider-min-max {
@@ -423,4 +427,21 @@ input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.error-text {
+  transition: 0.3s ease-in;
+  color: @faded-red;
+  font-size: 12px;
+}
+
+.date-error {
+  span.ant-calendar-picker, span.ant-time-picker {
+    border: 1px solid @faded-red !important;
+    border-radius: 4px;
+  }
+
+  input:focus {
+    border: 1px solid transparent !important;
+  }
 }

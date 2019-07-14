@@ -11,6 +11,8 @@ import addBet from 'Root/actions/myrequests/add';
 import styles from './styles.less';
 import {RadioGroup, Radio} from 'react-radio-group';
 
+let validate = false;
+
 class CreateRequests extends Component {
   state = {
     currency: 'Bitcoin',
@@ -24,103 +26,92 @@ class CreateRequests extends Component {
     expirationDate: '',
     expirationTime: '',
     betAmount: '',
+    errors: {
+      predictPrice: '',
+      specified: '',
+      expiration: '',
+      betAmount: '',
+    },
+    // validate: false,
   };
-
-  componentDidMount() {
-    this.setState({date: moment().format('YYYY/MM/DD')});
-    // console.warn(moment().format('YYYY/MM/DD'));
-    // console.warn(moment().endOf('day'));
-  }
 
   handleSelect = ({key}) => {
     this.setState({
       currency: key.charAt(0).toUpperCase() + key.slice(1),
       currencyKey: key,
     });
-    // console.warn(key);
-  };
-  handlePredictChange = (value) => {
-    this.setState({selectedPredictValue: value});
-  };
-  handleDateChange = (value) => {
-    this.setState({selectedDateValue: value});
   };
 
-  range = (start, end) => {
-    const result = [];
-    for (let i = start; i < end; i++) {
-      result.push(i);
+  handleErrors = (msd, med) => {
+    if (this.state.predictPrice.length >= 0) {
+      this.checkError(
+          !(/^\d+$/.test(this.state.predictPrice)) ||
+          (this.state.predictPrice.length === 0),
+          'predictPrice',
+          'Please enter number');
     }
-    return result;
+    if (this.state.betAmount.length >= 0) {
+      this.checkError(
+          (!(/^\d+$/.test(this.state.betAmount)) ||
+              (this.state.betAmount.length === 0)),
+          'betAmount',
+          'Please enter number',
+      );
+    }
+    this.checkError(
+        msd === null,
+        'specified',
+        'Please select specified data and time',
+    );
+    this.checkError(
+        med === null,
+        'expiration',
+        'Please select expiration data and time',
+    );
+    if (this.state.specifiedDate && this.state.specifiedTime) {
+      this.checkError(
+          msd < moment(),
+          'specified',
+          'Specified date must be more then current date',
+      );
+    }
+    if (this.state.expirationDate && this.state.expirationTime) {
+      this.checkError(
+          (med < moment()) || (med > msd),
+          'expiration',
+          'expiration date must be more then current date and lesser specified date',
+      );
+    }
   };
 
-  disabledHours = () => {
-    const hours = this.range(0, 60);
-    const specify = moment(this.state.specifiedDate).format('YYYY/MM/DD');
-    const current = moment().endOf('day').format('YYYY/MM/DD');
-    if (specify === current) {
-      const currentHour = moment.utc().format('HH');
-      hours.splice(currentHour, 24 - currentHour);
-    } else {
-      hours.splice(0, 24);
-    }
-    return hours;
-  };
-
-  disabledMinutes = () => {
-    const specify = moment(this.state.specifiedDate).format('YYYY/MM/DD');
-    const current = moment().endOf('day').format('YYYY/MM/DD');
-    if (specify === current) {
-      const currentMinutes = moment.utc().format('mm');
-      return this.range(0, currentMinutes);
-    }
-  };
-
-  disabledExpirationHours = () => {
-    const hours = this.range(0, 60);
-    const expire = moment(this.state.expirationDate).format('YYYY/MM/DD');
-    const current = moment().endOf('day').format('YYYY/MM/DD');
-    if (expire === current) {
-      const currentHour = moment.utc().format('HH');
-      hours.splice(0, currentHour);
-    } else {
-      hours.splice(0, 24);
-    }
-    return hours;
-  };
-
-  disabledExpirationMinutes = () => {
-    const expire = moment(this.state.expirationDate).format('YYYY/MM/DD');
-    const current = moment().endOf('day').format('YYYY/MM/DD');
-    const currentMinutes = moment.utc().format('mm');
-    if (expire === current) {
-      return this.range((currentMinutes) - 1, 59);
-    }
+  checkError = (condition, name, errorText) => {
+    this.setState(prevState => ({
+      errors: {
+        ...prevState.errors,
+        [name]: condition ? errorText : '',
+      },
+    }), () => {
+      validate = this.validateForm(this.state.errors);
+    });
   };
 
   onChangeSpecifiedDate = (date, dateString) => {
-    // console.log(date, dateString);
     this.setState({specifiedDate: date});
-    this.disabledExpirationDate(this.state.specifiedDate);
+    // this.disabledExpirationDate(this.state.specifiedDate);
   };
 
   onChangeExpirationDate = (date, dateString) => {
-    // console.log(date, dateString);
     this.setState({expirationDate: date});
   };
 
-  disabledSpecifiedDate = (current) => {
-    // console.warn(moment.utc().format('HH:mm:ss'));
-    return current && current < moment().endOf('day').subtract(1, 'd');
-  };
-
-  disabledExpirationDate = (current) => {
-    if (this.state.specifiedDate) {
-      return current < moment().endOf('day').subtract(1, 'd') ||
-          current > this.state.specifiedDate;
-    } else {
-      return current && current > moment().endOf('day');
-    }
+  validateForm = (errors) => {
+    let valid = true;
+    Object.keys(errors).forEach(
+        (val) => {
+          errors[val].length > 0 && (valid = false);
+        },
+    );
+    return valid;
   };
 
   onSubmit = () => {
@@ -139,25 +130,37 @@ class CreateRequests extends Component {
       betAmount: this.state.betAmount,
     };
 
-    const msd = this.state.specifiedDate.clone();
-    msd.set({
-      hour: this.state.specifiedTime.hour(),
-      minute: this.state.specifiedTime.minute(),
-    });
+    let msd = null;
+    if (this.state.specifiedDate && this.state.specifiedTime) {
+      msd = this.state.specifiedDate.clone();
+      msd.set({
+        hour: this.state.specifiedTime.hour(),
+        minute: this.state.specifiedTime.minute(),
+      });
+    }
 
-    const med = this.state.expirationDate.clone();
-    med.set({
-      hour: this.state.expirationTime.hour(),
-      minute: this.state.expirationTime.minute(),
-    });
+    let med = null;
+    if (this.state.expirationDate && this.state.expirationTime) {
+      med = this.state.expirationDate.clone();
+      med.set({
+        hour: this.state.expirationTime.hour(),
+        minute: this.state.expirationTime.minute(),
+      });
+    }
 
-    addBet({
-      currency: this.state.currencyKey,
-      predictionPrice: this.state.predictPrice,
-      predictionType: predictType,
-      specifiedDate: msd.toDate().getTime(),
-      lockTime: med.toDate().getTime(),
-      betAmount: this.state.betAmount,
+    this.handleErrors(msd, med);
+    this.setState({}, () => {
+      // console.warn(validate);
+      if (validate) {
+        addBet({
+          currency: this.state.currencyKey,
+          predictionPrice: this.state.predictPrice,
+          predictionType: predictType,
+          specifiedDate: msd.toDate().getTime(),
+          lockTime: med.toDate().getTime(),
+          betAmount: this.state.betAmount,
+        });
+      }
     });
   };
 
@@ -203,7 +206,10 @@ class CreateRequests extends Component {
                               <RadioGroup
                                   name="predictPrice"
                                   selectedValue={this.state.selectedPredictValue}
-                                  onChange={this.handlePredictChange}>
+                                  onChange={(event) => {
+                                    this.setState(
+                                        {selectedPredictValue: event});
+                                  }}>
                                 <div className="row">
                                   <div
                                       className="col-xl-5 col-lg-5 col-md-5 col-sm-5 col-12">
@@ -214,7 +220,12 @@ class CreateRequests extends Component {
                                   </div>
                                   <div
                                       className="col-xl-7 col-lg-7 col-md-7 col-sm-7 col-12 simple-input-group">
-                                    <div className="input-group ">
+                                    <div className={'input-group ' +
+                                    ((this.state.errors.predictPrice.length >
+                                        0 &&
+                                        this.state.selectedPredictValue ===
+                                        'predictGreater'
+                                    ) ? 'input-error' : '')}>
                                       <input type="number"
                                              onChange={(event) => {
                                                this.setState(
@@ -230,6 +241,15 @@ class CreateRequests extends Component {
                                         </div>
                                       </div>
                                     </div>
+                                    {this.state.errors.predictPrice.length >
+                                    0 &&
+                                    (this.state.selectedPredictValue ===
+                                        'predictGreater') &&
+                                    <small
+                                        className="form-text error-text">
+                                      {this.state.errors.predictPrice}
+                                    </small>
+                                    }
                                   </div>
                                 </div>
                                 <div className="row mt-3">
@@ -242,7 +262,12 @@ class CreateRequests extends Component {
                                   </div>
                                   <div
                                       className="col-xl-7 col-lg-7 col-md-7 col-sm-7 col-12 simple-input-group">
-                                    <div className="input-group">
+                                    <div className={'input-group ' +
+                                    ((this.state.errors.predictPrice.length >
+                                        0 &&
+                                        this.state.selectedPredictValue ===
+                                        'predictLesser'
+                                    ) ? 'input-error' : '')}>
                                       <input type="number"
                                              onChange={(event) => {
                                                this.setState(
@@ -258,20 +283,19 @@ class CreateRequests extends Component {
                                         </div>
                                       </div>
                                     </div>
+                                    {this.state.errors.predictPrice.length >
+                                    0 &&
+                                    (this.state.selectedPredictValue ===
+                                        'predictLesser') &&
+                                    <small
+                                        className="form-text error-text">
+                                      {this.state.errors.predictPrice}
+                                    </small>
+                                    }
                                   </div>
                                 </div>
                               </RadioGroup>
                             </div>
-                            {/*<div*/}
-                            {/*className="col-xl-7 col-lg-7 col-md-7 col-sm-7 col-12">*/}
-                            {/*<div className="row simple-input-group">*/}
-                            {/*<div className="col-12 pl-0">*/}
-                            {/**/}
-                            {/*</div>*/}
-                            {/*<div className="col-12 mt-2 pl-0">*/}
-                            {/*</div>*/}
-                            {/*</div>*/}
-                            {/*</div>*/}
                           </div>
                         </div>
                       </div>
@@ -282,21 +306,31 @@ class CreateRequests extends Component {
                         </div>
                       </div>
                       <div
-                          className={classNames(styles['date-section'], 'row')}>
+                          className={classNames(styles['date-section'],
+                              'row ' +
+                              (this.state.errors.specified.length > 0 ?
+                                  'date-error' :
+                                  ''))}>
                         <div
                             className='col-xl-3 col-lg-4 col-md-5 col-sm-6 col-6 pr-xl-4'>
+                          {/*disabledDate={this.disabledSpecifiedDate}*/}
                           <DatePicker
                               onChange={this.onChangeSpecifiedDate}
-                              disabledDate={this.disabledSpecifiedDate}
                               format={dateFormat}
                               className={styles.time}/>
+                          {this.state.errors.specified.length > 0 &&
+                          <small
+                              className="form-text error-text">
+                            {this.state.errors.specified}
+                          </small>
+                          }
                         </div>
                         <div className="col-xl-3 col-lg-4 col-md-5 col-sm-6 col-6
                                              pr-xl-5  pl-xl-0 ">
+                          {/*disabledHours={this.disabledHours}*/}
+                          {/*disabledMinutes={this.disabledMinutes}*/}
                           <TimePicker
                               format={format}
-                              disabledHours={this.disabledHours}
-                              disabledMinutes={this.disabledMinutes}
                               onChange={(time) => {
                                 this.setState({specifiedTime: time});
                               }}
@@ -312,25 +346,35 @@ class CreateRequests extends Component {
                       </div>
                       {/*custom date*/}
                       <div
-                          className={classNames(styles['date-section'], 'row')}>
+                          className={classNames(styles['date-section'],
+                              'row ' +
+                              (this.state.errors.expiration.length > 0 ?
+                                  'date-error' :
+                                  ''))}>
                         <div
                             className="col-xl-3 col-lg-4 col-md-5 col-sm-6 col-6 pr-xl-4">
+                          {/*disabledDate={this.disabledExpirationDate}*/}
                           <DatePicker
                               onChange={this.onChangeExpirationDate}
                               disabled={this.state.selectedDateValue !==
                               'custom'}
                               format={dateFormat}
-                              disabledDate={this.disabledExpirationDate}
                               className={styles.time}/>
+                          {this.state.errors.expiration.length > 0 &&
+                          <small
+                              className="form-text error-text">
+                            {this.state.errors.expiration}
+                          </small>
+                          }
                         </div>
                         <div className="col-xl-3 col-lg-4 col-md-5 col-sm-6 col-6
                         pr-xl-5  pl-xl-0 ">
+                          {/*disabledHours={this.disabledExpirationHours}*/}
+                          {/*disabledMinutes={this.disabledExpirationMinutes}*/}
                           <TimePicker
                               format={format}
                               disabled={this.state.selectedDateValue !==
                               'custom'}
-                              disabledHours={this.disabledExpirationHours}
-                              disabledMinutes={this.disabledExpirationMinutes}
                               onChange={(time) => {
                                 this.setState({expirationTime: time});
                               }}
@@ -342,11 +386,14 @@ class CreateRequests extends Component {
                         <div className="col-xl-6 col-lg-9 col-md-10 col-sm-12 col-12
                          pr-xl-5 pr-lg-5 simple-input-group">
                           <h6 className="block-title">Amount bet</h6>
-                          <div className="input-group ">
+                          <div className={'input-group ' +
+                          ((this.state.errors.betAmount.length > 0) ?
+                              'input-error' :
+                              '')}>
                             <input type="number"
                                    onChange={(event) => {
                                      this.setState({
-                                       betAmount: parseInt(event.target.value),
+                                       betAmount: event.target.value,
                                      });
                                    }}
                                    pattern="[0-9]*"
@@ -356,6 +403,12 @@ class CreateRequests extends Component {
                               <div className="input-group-text">TRX</div>
                             </div>
                           </div>
+                          {this.state.errors.betAmount.length > 0 &&
+                          <small
+                              className="form-text error-text">
+                            {this.state.errors.betAmount}
+                          </small>
+                          }
                         </div>
                       </div>
                       <button className={classNames(styles.submit,
