@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {NavLink} from 'react-router-dom';
+import {connect} from 'react-redux';
 import Sidebar from 'react-sidebar';
 import classNames from 'classnames';
 import styles from './styles.less';
@@ -41,7 +42,14 @@ class SideNav extends Component {
                         </div>
                         <div className="col-6">
                           <div className={styles['balance-box']}>
+<<<<<<< HEAD
                             <h6 className={styles.trx}>{(this.props.user.balance / 1000000).toFixed(2)} TRX</h6>
+=======
+                            <h6 className={styles.trx}>
+                              {(this.props.user.balance / 1000000).toFixed(
+                                  2)} TRX
+                            </h6>
+>>>>>>> edit
                             <h6 className={styles.balance}>
                                 <span>
                                   <img src={diamonds}
@@ -98,13 +106,19 @@ class SideNav extends Component {
                           <h6 className={styles['address-title']}>Address:</h6>
                         </div>
                         <div className="col-6 text-right">
-                          <CopyText text={this.state.address}/>
+                          <CopyText text={this.props.user.address}/>
                         </div>
                       </div>
                       <div className="row mt-1">
                         <div className="col-12">
                           <h6 className={classNames(styles.copy)}>
+<<<<<<< HEAD
                             {this.props.user.address}
+=======
+                            {this.props.user.address.length > 27 ?
+                                (this.props.user.address.slice(0, 27) + '...') :
+                                this.props.user.address}
+>>>>>>> edit
                           </h6>
                         </div>
                       </div>
@@ -134,4 +148,8 @@ class SideNav extends Component {
   }
 }
 
+<<<<<<< HEAD
 export default connect(state => ({ user: state.user }))(SideNav);
+=======
+export default connect(state => ({user: state.user}))(SideNav);
+>>>>>>> edit

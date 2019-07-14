@@ -10,7 +10,7 @@ import {
 import NavButton from 'Root/shared/components/Header/NavButton';
 import CopyText from 'Root/shared/components/CopyText';
 import shorter from 'Root/helpers/shorter';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
 const address = 'TJWzn8rjLYbfS3hcAVVscLeERUs6rfMoA5';
 
@@ -40,16 +40,18 @@ const Nav = (props) => (
               styles['show-text'])}>
             <span className={styles['address-title']}>Address : </span>
             <span className={classNames(styles.copy, 'pl-2')}>
-              {props.user.address}
+              {props.user.address.length > 17 ?
+                  (props.user.address.slice(0, 16) + '...') :
+                  props.user.address}
               <span className="pl-3">
-                <CopyText text={props.user.address} />
+                <CopyText text={props.user.address}/>
               </span>
             </span>
           </div>
           <div className={classNames(styles.address, styles['hide-text'])}>
             <span className={styles['address-title']}>Address : </span>
             <span className={classNames(styles.copy, 'pl-2')}>
-              {shorter(props.user.address)}
+              {props.user.address.slice(0,4) + '...'}
               <span className="pl-3">
                 <CopyText text={props.user.address}/>
               </span>
@@ -60,4 +62,4 @@ const Nav = (props) => (
     </Fragment>
 );
 
-export default connect(state => ({ user: state.user }))(Nav);
+export default connect(state => ({user: state.user}))(Nav);

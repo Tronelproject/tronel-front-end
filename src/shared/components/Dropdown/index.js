@@ -1,10 +1,8 @@
 import React from 'react';
-
+import classNames from 'classnames';
 import Dropdown from 'rc-dropdown';
-import Menu, { Item as MenuItem, Divider } from 'rc-menu';
-
 import styles from './styles.less';
-// import arrowdownIcon from 'Root/images/arrow-down.png';
+
 
 function onVisibleChange(visible) {
   // console.log(visible);
@@ -26,9 +24,9 @@ function Dropdowns(props) {
               animation="slide-up"
               onVisibleChange={onVisibleChange}
           >
-            <button type="button" className={styles.dropdownButton}>
-              {title}
-             <span className="icon-angle-down" />
+            <button type="button" className={classNames(styles.dropdownButton,'w-100')}>
+              <span className="float-left">{title}</span>
+              <span className="icon-angle-down float-right"/>
             </button>
           </Dropdown>
         </div>

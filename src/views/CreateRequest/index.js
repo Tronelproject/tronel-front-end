@@ -11,6 +11,8 @@ import addBet from 'Root/actions/myrequests/add';
 import styles from './styles.less';
 import {RadioGroup, Radio} from 'react-radio-group';
 
+let validate = false;
+
 class CreateRequests extends Component {
   state = {
     currency: 'Bitcoin',
@@ -24,49 +26,92 @@ class CreateRequests extends Component {
     expirationDate: '',
     expirationTime: '',
     betAmount: '',
+    errors: {
+      predictPrice: '',
+      specified: '',
+      expiration: '',
+      betAmount: '',
+    },
+    // validate: false,
   };
-
-  componentDidMount() {
-    this.setState({date: moment().format('YYYY/MM/DD')});
-    console.warn(moment().format('YYYY/MM/DD'));
-    console.warn(moment().endOf('day'));
-  }
 
   handleSelect = ({key}) => {
     this.setState({
       currency: key.charAt(0).toUpperCase() + key.slice(1),
       currencyKey: key,
     });
-    // console.warn(key);
   };
-  handlePredictChange = (value) => {
-    this.setState({selectedPredictValue: value});
+
+  handleErrors = (msd, med) => {
+    if (this.state.predictPrice.length >= 0) {
+      this.checkError(
+          !(/^\d+$/.test(this.state.predictPrice)) ||
+          (this.state.predictPrice.length === 0),
+          'predictPrice',
+          'Please enter number');
+    }
+    if (this.state.betAmount.length >= 0) {
+      this.checkError(
+          (!(/^\d+$/.test(this.state.betAmount)) ||
+              (this.state.betAmount.length === 0)),
+          'betAmount',
+          'Please enter number',
+      );
+    }
+    this.checkError(
+        msd === null,
+        'specified',
+        'Please select specified data and time',
+    );
+    this.checkError(
+        med === null,
+        'expiration',
+        'Please select expiration data and time',
+    );
+    if (this.state.specifiedDate && this.state.specifiedTime) {
+      this.checkError(
+          msd < moment(),
+          'specified',
+          'Specified date must be more then current date',
+      );
+    }
+    if (this.state.expirationDate && this.state.expirationTime) {
+      this.checkError(
+          (med < moment()) || (med > msd),
+          'expiration',
+          'expiration date must be more then current date and lesser specified date',
+      );
+    }
   };
-  handleDateChange = (value) => {
-    this.setState({selectedDateValue: value});
+
+  checkError = (condition, name, errorText) => {
+    this.setState(prevState => ({
+      errors: {
+        ...prevState.errors,
+        [name]: condition ? errorText : '',
+      },
+    }), () => {
+      validate = this.validateForm(this.state.errors);
+    });
   };
 
   onChangeSpecifiedDate = (date, dateString) => {
-    // console.log(date, dateString);
     this.setState({specifiedDate: date});
-    this.disabledExpirationDate(this.state.specifiedDate);
+    // this.disabledExpirationDate(this.state.specifiedDate);
   };
 
   onChangeExpirationDate = (date, dateString) => {
-    // console.log(date, dateString);
     this.setState({expirationDate: date});
   };
 
-  disabledSpecifiedDate = (current) => {
-    return current && current < moment().endOf('day');
-  };
-
-  disabledExpirationDate = (current) => {
-    if (this.state.specifiedDate) {
-      return current > this.state.specifiedDate;
-    } else {
-      return current && current > moment().endOf('day');
-    }
+  validateForm = (errors) => {
+    let valid = true;
+    Object.keys(errors).forEach(
+        (val) => {
+          errors[val].length > 0 && (valid = false);
+        },
+    );
+    return valid;
   };
 
   onSubmit = () => {
@@ -85,25 +130,37 @@ class CreateRequests extends Component {
       betAmount: this.state.betAmount,
     };
 
-    const msd = this.state.specifiedDate.clone();
-    msd.set({
-      hour: this.state.specifiedTime.hour(),
-      minute: this.state.specifiedTime.minute(),
-    });
+    let msd = null;
+    if (this.state.specifiedDate && this.state.specifiedTime) {
+      msd = this.state.specifiedDate.clone();
+      msd.set({
+        hour: this.state.specifiedTime.hour(),
+        minute: this.state.specifiedTime.minute(),
+      });
+    }
 
-    const med = this.state.expirationDate.clone();
-    med.set({
-      hour: this.state.expirationTime.hour(),
-      minute: this.state.expirationTime.minute(),
-    });
+    let med = null;
+    if (this.state.expirationDate && this.state.expirationTime) {
+      med = this.state.expirationDate.clone();
+      med.set({
+        hour: this.state.expirationTime.hour(),
+        minute: this.state.expirationTime.minute(),
+      });
+    }
 
-    addBet({
-      currency: this.state.currencyKey,
-      predictionPrice: this.state.predictPrice,
-      predictionType: predictType,
-      specifiedDate: msd.toDate().getTime(),
-      lockTime: med.toDate().getTime(),
-      betAmount: this.state.betAmount,
+    this.handleErrors(msd, med);
+    this.setState({}, () => {
+      // console.warn(validate);
+      if (validate) {
+        addBet({
+          currency: this.state.currencyKey,
+          predictionPrice: this.state.predictPrice,
+          predictionType: predictType,
+          specifiedDate: msd.toDate().getTime(),
+          lockTime: med.toDate().getTime(),
+          betAmount: this.state.betAmount,
+        });
+      }
     });
   };
 
@@ -133,7 +190,8 @@ class CreateRequests extends Component {
                       <div className="row">
                         <div
                             className="col-xl-6 col-lg-9 col-md-10 col-sm-12 col-12 pr-xl-5 pr-lg-5">
-                          <h6 className="block-title">Select a currency</h6>
+                          <h6 className="block-title">Select a
+                            cryptocurrency</h6>
                           <DropDown menu={menu} title={this.state.currency}/>
                         </div>
                       </div>
@@ -141,62 +199,102 @@ class CreateRequests extends Component {
                       <div className="row mt-4 pt-3">
                         <div
                             className="col-xl-6 col-lg-9 col-md-10 col-sm-12 col-12 pr-xl-5 pr-lg-5">
-                          <h6 className="block-title">Predict price:</h6>
+                          <h6 className="block-title">Prediction price:</h6>
                           <div className="row mt-2">
-                            <div
-                                className="col-xl-5 col-lg-5 col-sm-5 col-md-5 col-sm-5 col-6 radio-group-section">
+                            <div className="radio-group-section
+                                 w-100 px-3">
                               <RadioGroup
                                   name="predictPrice"
                                   selectedValue={this.state.selectedPredictValue}
-                                  onChange={this.handlePredictChange}>
-                                <label className="radio mt-2 pt-1">
-                                  <Radio value="predictGreater"/>
-                                  <span>Greater and Equal</span>
-                                </label>
-                                <label className="radio mt-4 pt-2">
-                                  <Radio value="predictLesser"/>
-                                  <span>Lesser and Equal</span>
-                                </label>
+                                  onChange={(event) => {
+                                    this.setState(
+                                        {selectedPredictValue: event});
+                                  }}>
+                                <div className="row">
+                                  <div
+                                      className="col-xl-5 col-lg-5 col-md-5 col-sm-5 col-12">
+                                    <label className="radio mt-2 pt-1">
+                                      <Radio value="predictGreater"/>
+                                      <span>Greater and Equal</span>
+                                    </label>
+                                  </div>
+                                  <div
+                                      className="col-xl-7 col-lg-7 col-md-7 col-sm-7 col-12 simple-input-group">
+                                    <div className={'input-group ' +
+                                    ((this.state.errors.predictPrice.length >
+                                        0 &&
+                                        this.state.selectedPredictValue ===
+                                        'predictGreater'
+                                    ) ? 'input-error' : '')}>
+                                      <input type="number"
+                                             onChange={(event) => {
+                                               this.setState(
+                                                   {predictPrice: event.target.value});
+                                             }}
+                                             pattern="[0-9]*"
+                                             className="form-control"
+                                             disabled={this.state.selectedPredictValue ===
+                                             'predictLesser'}
+                                             placeholder="predict greater"/>
+                                      <div className="input-group-prepend">
+                                        <div className="input-group-text">$
+                                        </div>
+                                      </div>
+                                    </div>
+                                    {this.state.errors.predictPrice.length >
+                                    0 &&
+                                    (this.state.selectedPredictValue ===
+                                        'predictGreater') &&
+                                    <small
+                                        className="form-text error-text">
+                                      {this.state.errors.predictPrice}
+                                    </small>
+                                    }
+                                  </div>
+                                </div>
+                                <div className="row mt-3">
+                                  <div
+                                      className="col-xl-5 col-lg-5 col-md-5 col-sm-5 col-12">
+                                    <label className="radio mt-2 pt-1">
+                                      <Radio value="predictLesser"/>
+                                      <span>Lesser and Equal</span>
+                                    </label>
+                                  </div>
+                                  <div
+                                      className="col-xl-7 col-lg-7 col-md-7 col-sm-7 col-12 simple-input-group">
+                                    <div className={'input-group ' +
+                                    ((this.state.errors.predictPrice.length >
+                                        0 &&
+                                        this.state.selectedPredictValue ===
+                                        'predictLesser'
+                                    ) ? 'input-error' : '')}>
+                                      <input type="number"
+                                             onChange={(event) => {
+                                               this.setState(
+                                                   {predictPrice: event.target.value});
+                                             }}
+                                             pattern='[0-9]*'
+                                             className='form-control'
+                                             disabled={this.state.selectedPredictValue ===
+                                             'predictGreater'}
+                                             placeholder='predict lesser'/>
+                                      <div className='input-group-prepend'>
+                                        <div className='input-group-text'>$
+                                        </div>
+                                      </div>
+                                    </div>
+                                    {this.state.errors.predictPrice.length >
+                                    0 &&
+                                    (this.state.selectedPredictValue ===
+                                        'predictLesser') &&
+                                    <small
+                                        className="form-text error-text">
+                                      {this.state.errors.predictPrice}
+                                    </small>
+                                    }
+                                  </div>
+                                </div>
                               </RadioGroup>
-                            </div>
-                            <div
-                                className="col-xl-7 col-lg-7 col-md-7 col-sm-7 col-6">
-                              <div className="row simple-input-group">
-                                <div className="col-12 pl-0">
-                                  <div className="input-group ">
-                                    <input type="text"
-                                           onChange={(event) => {
-                                             this.setState(
-                                                 {predictPrice: event.target.value});
-                                           }}
-                                           pattern="[0-9]*"
-                                           className="form-control"
-                                           disabled={this.state.selectedPredictValue ===
-                                           'predictLesser'}
-                                           placeholder="predict greater"/>
-                                    <div className="input-group-prepend">
-                                      <div className="input-group-text">$</div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="col-12 mt-2 pl-0">
-                                  <div className="input-group">
-                                    <input type="text"
-                                           onChange={(event) => {
-                                             this.setState(
-                                                 {predictPrice: event.target.value});
-                                           }}
-                                           pattern='[0-9]*'
-                                           className='form-control'
-                                           disabled={this.state.selectedPredictValue ===
-                                           'predictGreater'}
-                                           placeholder='predict lesser'/>
-                                    <div className='input-group-prepend'>
-                                      <div className='input-group-text'>$</div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
                             </div>
                           </div>
                         </div>
@@ -204,21 +302,33 @@ class CreateRequests extends Component {
                       {/*specified date*/}
                       <div className="row mt-4 pt-2">
                         <div className="col-12">
-                          <h6 className="block-title">Specified date (UTC)</h6>
+                          <h6 className="block-title">Specified date</h6>
                         </div>
                       </div>
                       <div
-                          className={classNames(styles['date-section'], 'row')}>
+                          className={classNames(styles['date-section'],
+                              'row ' +
+                              (this.state.errors.specified.length > 0 ?
+                                  'date-error' :
+                                  ''))}>
                         <div
                             className='col-xl-3 col-lg-4 col-md-5 col-sm-6 col-6 pr-xl-4'>
                           {/*disabledDate={this.disabledSpecifiedDate}*/}
                           <DatePicker
                               onChange={this.onChangeSpecifiedDate}
-                              format='YYYY-MM-DD'
+                              format={dateFormat}
                               className={styles.time}/>
+                          {this.state.errors.specified.length > 0 &&
+                          <small
+                              className="form-text error-text">
+                            {this.state.errors.specified}
+                          </small>
+                          }
                         </div>
                         <div className="col-xl-3 col-lg-4 col-md-5 col-sm-6 col-6
                                              pr-xl-5  pl-xl-0 ">
+                          {/*disabledHours={this.disabledHours}*/}
+                          {/*disabledMinutes={this.disabledMinutes}*/}
                           <TimePicker
                               format={format}
                               onChange={(time) => {
@@ -235,9 +345,12 @@ class CreateRequests extends Component {
                         </div>
                       </div>
                       {/*custom date*/}
-                      <div className={classNames(
-                          styles['date-section'],
-                          'row mt-3')}>
+                      <div
+                          className={classNames(styles['date-section'],
+                              'row ' +
+                              (this.state.errors.expiration.length > 0 ?
+                                  'date-error' :
+                                  ''))}>
                         <div
                             className="col-xl-3 col-lg-4 col-md-5 col-sm-6 col-6 pr-xl-4">
                           {/*disabledDate={this.disabledExpirationDate}*/}
@@ -247,9 +360,17 @@ class CreateRequests extends Component {
                               'custom'}
                               format={dateFormat}
                               className={styles.time}/>
+                          {this.state.errors.expiration.length > 0 &&
+                          <small
+                              className="form-text error-text">
+                            {this.state.errors.expiration}
+                          </small>
+                          }
                         </div>
                         <div className="col-xl-3 col-lg-4 col-md-5 col-sm-6 col-6
                         pr-xl-5  pl-xl-0 ">
+                          {/*disabledHours={this.disabledExpirationHours}*/}
+                          {/*disabledMinutes={this.disabledExpirationMinutes}*/}
                           <TimePicker
                               format={format}
                               disabled={this.state.selectedDateValue !==
@@ -265,9 +386,16 @@ class CreateRequests extends Component {
                         <div className="col-xl-6 col-lg-9 col-md-10 col-sm-12 col-12
                          pr-xl-5 pr-lg-5 simple-input-group">
                           <h6 className="block-title">Amount bet</h6>
-                          <div className="input-group ">
-                            <input type="text"
-                                   onChange={(event) => {this.setState({betAmount: parseInt(event.target.value)})}}
+                          <div className={'input-group ' +
+                          ((this.state.errors.betAmount.length > 0) ?
+                              'input-error' :
+                              '')}>
+                            <input type="number"
+                                   onChange={(event) => {
+                                     this.setState({
+                                       betAmount: event.target.value,
+                                     });
+                                   }}
                                    pattern="[0-9]*"
                                    className="form-control"
                                    placeholder="amount"/>
@@ -275,6 +403,12 @@ class CreateRequests extends Component {
                               <div className="input-group-text">TRX</div>
                             </div>
                           </div>
+                          {this.state.errors.betAmount.length > 0 &&
+                          <small
+                              className="form-text error-text">
+                            {this.state.errors.betAmount}
+                          </small>
+                          }
                         </div>
                       </div>
                       <button className={classNames(styles.submit,

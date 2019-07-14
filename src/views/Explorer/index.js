@@ -10,10 +10,6 @@ import styles from './styles.less';
 
 const Range = createSliderWithTooltip(Slider.Range);
 
-function range(e) {
-  console.log(e);
-}
-
 class Explorer extends Component {
 
   state = {
@@ -21,17 +17,33 @@ class Explorer extends Component {
     vertically: true,
     currency: 'All',
     currencyKey: 'all',
+    betID: '',
+    bets: [],
   };
 
   componentDidMount() {
+    this.setState({bets: [...this.props.bets]});
+    if (localStorage.getItem('explorerLayout')) {
+      if (localStorage.getItem('explorerLayout') === 'horizontally') {
+        this.showHorizontally();
+      } else {
+        this.showVertically();
+      }
+    }
+  }
+
+  componentWillReceiveProps(nextProps, nextContext) {
+    this.setState({bets: [...nextProps.bets]});
   }
 
   showHorizontally = () => {
     this.setState({vertically: false, horizontally: true});
+    localStorage.setItem('explorerLayout', 'horizontally');
   };
 
   showVertically = () => {
     this.setState({vertically: true, horizontally: false});
+    localStorage.setItem('explorerLayout', 'vertically');
   };
 
   handleSelect = ({key}) => {
@@ -39,7 +51,41 @@ class Explorer extends Component {
       currency: key.charAt(0).toUpperCase() + key.slice(1),
       currencyKey: key,
     });
-    // console.warn(key);
+    if (key === 'all') {
+      this.setState(
+          {bets: [...this.props.bets]},
+      );
+    } else {
+      this.setState(
+          {
+            bets: this.props.bets.filter(
+                bet => bet.currency === key),
+          },
+      );
+    }
+  };
+
+  range = (e) => {
+    const trx = 1000000;
+    this.setState(
+        {
+          bets: this.props.bets.filter(
+              bet => ((bet.betAmount / trx) >= e[0])
+                  && ((bet.betAmount / trx) <= e[1])),
+        },
+    );
+  };
+
+  onFindByBetId = () => {
+    if (this.state.betID.length > 0) {
+      this.setState(
+          {bets: this.props.bets.filter(bet => bet._id === this.state.betID)},
+      );
+    } else {
+      this.setState(
+          {bets: [...this.props.bets]},
+      );
+    }
   };
 
   isEven = (index) => {
@@ -50,6 +96,7 @@ class Explorer extends Component {
     let column = null;
     let rightColDiv = null;
     let leftColDiv = null;
+    console.warn(this.state.bets);
 
     if (this.state.horizontally) {
       column = 'col-12 mt-4';
@@ -86,22 +133,24 @@ class Explorer extends Component {
                     horizontallyHandler={this.showHorizontally}
                     verticallyHandler={this.showVertically}/>
                 <div className="row mt-4">
-                  <div className="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6
-                                  pr-xl-1 pr-lg-1 pr-md-2 pr-sm-2 pr-2">
+                  <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12
+                                  pr-xl-1 pr-lg-1 pr-md-2">
                     <div className="card block-padding">
                       <h6 className="block-title">
-                        Currency
+                        Cryptocurrency
                       </h6>
                       <DropDown menu={menu} title={this.state.currency}/>
                     </div>
                   </div>
-                  <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-6
-                                  px-xl-1 px-lg-1 pl-md-2 pl-sm-2 pl-2">
+                  <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12
+                                  px-xl-1 px-lg-1 pl-md-2 mt-xl-0 mt-lg-0 mt-md-0 mt-sm-3 mt-3">
                     <div className="card block-padding">
                       <h6 className="block-title pb-2">
                         Amount of bet
                       </h6>
-                      <Range onChange={range}
+                      <Range onChange={(event) => {
+                        this.range(event);
+                      }}
                              min={0}
                              max={1000}
                              defaultValue={[200, 500]}
@@ -126,25 +175,33 @@ class Explorer extends Component {
                                   pl-xl-1 pl-lg-1
                                   mt-xl-0 mt-lg-0 mt-md-3 mt-sm-3 mt-3">
                     <div className="card block-padding">
-                      <h6 className="block-title">Form number</h6>
+                      <h6 className="block-title">Bet ID</h6>
                       <div className="row">
                         <div
-                            className="col-xl-8 col-lg-8 col-md-9 col-sm-9 col-9 pr-0">
+                            className="col-xl-8 col-lg-8 col-md-9 col-sm-12 col-12
+                            pr-xl-0 pr-lg-0 pr-md-0">
                           <input className="form-control simple-form"
                                  pattern="[A-Za-z]"
                                  type="text"
-                                 placeholder="Enter your form number"/>
+                                 onChange={(event) => {
+                                   this.setState({betID: event.target.value});
+                                 }}
+                                 placeholder="Enter your bet id"/>
                         </div>
-                        <div className="col-3 text-right">
-                          <button className="btn simple-btn">Search</button>
+                        <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12
+                             text-xl-right text-lg-right text-md-right text-sm-left
+                             text-left mt-xl-0 mt-lg-0 mt-md-0 mt-sm-2 mt-2">
+                          <button className="btn simple-btn"
+                                  onClick={this.onFindByBetId}>Search
+                          </button>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="row mt-4">
-                  {this.props.bets.map((list, index) => (
-                      <div className={column}>
+                  {this.state.bets.map((list, index) => (
+                      <div className={column} key={index}>
                         <div className={this.isEven(index) ?
                             leftColDiv :
                             rightColDiv}>
