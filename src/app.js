@@ -37,7 +37,7 @@ async function loadAllStuff() {
       type: types.user.LOAD,
       user: {
         address: global.tronWeb.defaultAddress.base58,
-        booloo,
+        balance: booloo,
       },
     });
   }, 2000);
