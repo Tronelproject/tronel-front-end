@@ -53,7 +53,7 @@ class BetList extends Component {
         } else {
           if (this.props.list.submittedPrice <
               this.props.list.predictionPrice) {
-            state = won;
+            state = lost;
           } else {
             state = won;
           }
