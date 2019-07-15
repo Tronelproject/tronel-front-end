@@ -9,7 +9,8 @@ export default (bets) => {
       && !bets.done
       && !bet.disabled
       && bet.acceptor === 'T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb'
-      && bet.specifiedDate * 1000 > Date.now(),
+      && bet.specifiedDate * 1000 > Date.now()
+      && bet.lockTime * 1000 > Date.now(),
     ),
   });
 };
