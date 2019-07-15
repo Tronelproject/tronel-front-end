@@ -10,6 +10,7 @@ import DropDown from 'Root/shared/components/Dropdown';
 import addBet from 'Root/actions/myrequests/add';
 import styles from './styles.less';
 import {RadioGroup, Radio} from 'react-radio-group';
+import history from 'Root/history';
 
 let validate = false;
 
@@ -147,10 +148,10 @@ class CreateRequests extends Component {
     }
 
     this.handleErrors(msd, med);
-    this.setState({}, () => {
+    this.setState({}, async () => {
       // console.warn(validate);
       if (validate) {
-        addBet({
+        await addBet({
           currency: this.state.currencyKey,
           predictionPrice: this.state.predictPrice,
           predictionType: predictType,
@@ -158,6 +159,8 @@ class CreateRequests extends Component {
           lockTime: med.toDate().getTime(),
           betAmount: this.state.betAmount,
         });
+
+        history.push('/my-requests');
       }
     });
   };
