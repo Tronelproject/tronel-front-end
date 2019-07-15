@@ -8,8 +8,8 @@ export default (state = [], action) => {
 
     case types.myrequests.ADD: {
       return [
-        ...state,
         action.bet,
+        ...state,
       ];
     }
 

@@ -8,7 +8,8 @@ export default (bets) => {
       bet => bet.creator !== global.tronWeb.defaultAddress.base58
       && !bets.done
       && !bet.disabled
-      && bet.acceptor === 'T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb',
+      && bet.acceptor === 'T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb'
+      && bet.specifiedDate * 1000 > Date.now(),
     ),
   });
 };

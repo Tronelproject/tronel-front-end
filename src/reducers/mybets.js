@@ -8,8 +8,8 @@ export default (state = [], action) => {
 
     case types.mybets.ACCEPT: {
       return [
-        ...state,
         action.bet,
+        ...state,
       ];
     }
 
