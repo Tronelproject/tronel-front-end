@@ -46,13 +46,13 @@ class CreateRequests extends Component {
   handleErrors = (msd, med) => {
     if (this.state.predictPrice.length >= 0) {
       this.checkError(
-        parseFloat(this.state.predictPrice),
+        !parseFloat(this.state.predictPrice),
           'predictPrice',
           'Please enter number');
     }
     if (this.state.betAmount.length >= 0) {
       this.checkError(
-        parseFloat(this.state.betAmount),
+        !parseFloat(this.state.betAmount),
           'betAmount',
           'Please enter number',
       );
