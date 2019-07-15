@@ -13,9 +13,9 @@ const Header = (props) => (
     <Fragment>
       <nav className={classNames(styles.nav,
           'navbar navbar-expand-lg py-xl-0 py-lg-0 py-md-3 py-sm-3 py-3 ')}>
-        <Link className="navbar-brand ml-xl-0 ml-lg-0 ml-md-auto ml-sm-auto ml-auto" to={explorerRoute}>
+        <a className="navbar-brand ml-xl-0 ml-lg-0 ml-md-auto ml-sm-auto ml-auto" href="http://tronel.io">
           <img src={logo} alt="logo" width="29px" height="36px"/>
-        </Link>
+        </a>
         <div className="collapse navbar-collapse">
           <Nav/>
           <div className={styles['balance-box']}>
