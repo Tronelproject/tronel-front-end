@@ -16,6 +16,10 @@ export default {
     SHOW: 'modal/SHOW',
     HIDE: 'modal/HIDE',
   },
+  loadingModal: {
+    SHOW: 'loadingModal/SHOW',
+    HIDE: 'loadingModal/HIDE',
+  },
   user: {
     LOAD: 'user/LOAD',
   },
