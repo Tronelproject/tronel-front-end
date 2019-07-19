@@ -11,6 +11,8 @@ module.exports = Object.assign({}, common, {
   plugins: [
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'development',
+      SERVER: 'http://46.105.148.221:8020',
+      FACTORY: 'TWo4iMr794EwRR7FLwk9sDG8njxavLhtNX',
     }),
     new webpack.HotModuleReplacementPlugin(),
   ],

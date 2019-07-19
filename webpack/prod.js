@@ -21,6 +21,8 @@ module.exports = Object.assign({}, common, {
     new webpack.DefinePlugin({
       'process.env': {
         'NODE_ENV': JSON.stringify('production'),
+        SERVER: 'https://api.tronel.io',
+        FACTORY: 'TC12yaNN9VSctf3e2pE3Kq6jKArMt2fS1q',
       },
     }),
     new UglifyJsPlugin({
