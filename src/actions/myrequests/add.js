@@ -4,6 +4,10 @@ import fetch from 'Root/helpers/fetch';
 import store from 'Root/store';
 
 export default async (details) => {
+  store.dispatch({
+    type: types.loadingModal.SHOW,
+  });
+
   let res;
   try {
     const factory = await global.tronWeb.contract().at(config.factory);
@@ -20,7 +24,9 @@ export default async (details) => {
       shouldPollResponse: true,
     });
   } catch (e) {
-    console.log(e);
+    store.dispatch({
+      type: types.loadingModal.HIDE,
+    });
 
     return;
   }
@@ -39,5 +45,9 @@ export default async (details) => {
   store.dispatch({
     type: types.myrequests.ADD,
     bet: bet.data,
+  });
+
+  store.dispatch({
+    type: types.loadingModal.HIDE,
   });
 };

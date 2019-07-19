@@ -5,6 +5,10 @@ import removeFromBets from 'Root/actions/bets/remove';
 import config from 'Root/config';
 
 export default async (id) => {
+  store.dispatch({
+    type: types.loadingModal.SHOW,
+  });
+
   const bet = store.getState().bets.find(i => i._id === id);
 
   try {
@@ -14,6 +18,10 @@ export default async (id) => {
       shouldPollResponse: true,
     });
   } catch (e) {
+    store.dispatch({
+      type: types.loadingModal.HIDE,
+    });
+
     return;
   }
 
@@ -28,6 +36,10 @@ export default async (id) => {
   store.dispatch({
     type: types.mybets.ACCEPT,
     bet,
+  });
+
+  store.dispatch({
+    type: types.loadingModal.HIDE,
   });
 
   removeFromBets(id);
