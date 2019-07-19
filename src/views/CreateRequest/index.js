@@ -1,4 +1,5 @@
 import React, {Component, Fragment} from 'react';
+import BasicModal from 'Root/shared/components/Modal';
 import Menu, {Item as MenuItem, Divider} from 'rc-menu';
 import classNames from 'classnames';
 import moment from 'moment';
@@ -33,7 +34,7 @@ class CreateRequests extends Component {
       expiration: '',
       betAmount: '',
     },
-    // validate: false,
+    warning: false,
   };
 
   handleSelect = ({key}) => {
@@ -151,6 +152,7 @@ class CreateRequests extends Component {
     this.setState({}, async () => {
       // console.warn(validate);
       if (validate) {
+        this.setState({warning: true});
         await addBet({
           currency: this.state.currencyKey,
           predictionPrice: this.state.predictPrice,
@@ -159,7 +161,6 @@ class CreateRequests extends Component {
           lockTime: med.toDate().getTime(),
           betAmount: this.state.betAmount,
         });
-
         history.push('/my-requests');
       }
     });
@@ -422,6 +423,12 @@ class CreateRequests extends Component {
               </div>
             </div>
           </div>
+          <BasicModal
+              warningStatus={this.state.warning}
+              type={'loading'}
+              title={'Don’t refresh or close the page'}
+              text={'please wait, your request is being processing, it may takes 1 minute'}
+          />
         </Fragment>
     );
   }

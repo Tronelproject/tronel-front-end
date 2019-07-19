@@ -1,4 +1,6 @@
 import React, {Fragment, Component} from 'react';
+import store from 'Root/store';
+import BasicModal from 'Root/shared/components/Modal';
 import moment from 'moment';
 import CopyText from 'Root/shared/components/CopyText';
 import bitCoin from 'Root/assets/images/bitcoin.png';
@@ -12,6 +14,17 @@ import styles from './styles.less';
 class AcceptList extends Component {
   state = {
     modal: false,
+    warning: false,
+  };
+
+  toggle = () => {
+    if ((store.getState().user.balance / 1000000) < 2) {
+      this.setState({warning: true});
+    } else {
+      this.setState({warning: false});
+      acceptBet(this.props.list._id);
+      history.push('/my-bets');
+    }
   };
 
   checkImage = (currency) => {
@@ -258,19 +271,20 @@ class AcceptList extends Component {
               {(this.props.list.betAmount / trx) * 2} TRX and is the winner.
             </p>
             <button
-                onClick={async () => {
-                  await acceptBet(this.props.list._id);
-                  history.push('/my-bets');
+                onClick={() => {
+                  this.toggle();
                 }}
                 className={classNames(styles.btn, 'btn mt-2 ssss')}
             >
               <span className="icon-checked pr-2"/>
               Accept
             </button>
-            {/* <p onClick={() => { console.log('here') }} className={classNames(styles.btn, 'btn mt-2 ssss')}>
-              <span className="icon-checked pr-2"/>
-              Accept
-            </p> */}
+            <BasicModal
+                warningStatus={this.state.warning}
+                type={'acceptWarning'}
+                title={'For this action you need minimum 2 TRX'}
+                text={'It will spend for a fee on the send data to the smart contract'}
+            />
           </div>
         </Fragment>
     );

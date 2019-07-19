@@ -1,8 +1,10 @@
 import React, {Component, Fragment} from 'react';
+import store from 'Root/store';
 import moment from 'moment';
 import classNames from 'classnames';
 import CopyText from 'Root/shared/components/CopyText';
 import AlertModal from 'Root/shared/components/AlertModal';
+import BasicModal from 'Root/shared/components/Modal';
 import bitCoin from 'Root/assets/images/bitcoin.png';
 import ethereum from 'Root/assets/images/ethereum.png';
 import tron from 'Root/assets/images/tron.png';
@@ -11,12 +13,18 @@ import styles from './styles.less';
 class DeactivateList extends Component {
   state = {
     modal: false,
+    warning: false,
   };
 
   toggle = () => {
-    this.setState({
-      modal: !this.state.modal,
-    });
+    if ((store.getState().user.balance / 1000000) < 2) {
+      this.setState({warning: true});
+    } else {
+      this.setState({
+        modal: !this.state.modal,
+        warning: false,
+      });
+    }
   };
 
   checkImage = (currency) => {
@@ -32,7 +40,7 @@ class DeactivateList extends Component {
   };
 
   render() {
-    // console.warn(this.props.list);
+    // console.warn('heeree', store.getState().user.balance / 1000000);
     let newList = null;
     const trx = 1000000;
     const priceAmount = 10000;
@@ -305,6 +313,12 @@ class DeactivateList extends Component {
           <AlertModal modal={this.state.modal}
                       toggle={this.toggle}
                       bet={this.props.list}/>
+          <BasicModal
+              warningStatus={this.state.warning}
+              type={'deactivateWarning'}
+              title={'For this action you need minimum 2 TRX'}
+              text={'It will spend for a fee on the send data to the smart contract'}
+          />
         </Fragment>
     );
   }
