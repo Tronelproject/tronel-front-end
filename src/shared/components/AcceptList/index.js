@@ -6,6 +6,7 @@ import ethereum from 'Root/assets/images/ethereum.png';
 import tron from 'Root/assets/images/tron.png';
 import acceptBet from 'Root/actions/mybets/accept';
 import classNames from 'classnames';
+import history from 'Root/history';
 import styles from './styles.less';
 
 class AcceptList extends Component {
@@ -257,8 +258,9 @@ class AcceptList extends Component {
               {(this.props.list.betAmount / trx) * 2} TRX and is the winner.
             </p>
             <button
-                onClick={() => {
-                  acceptBet(this.props.list._id);
+                onClick={async () => {
+                  await acceptBet(this.props.list._id);
+                  history.push('/my-bets');
                 }}
                 className={classNames(styles.btn, 'btn mt-2 ssss')}
             >
