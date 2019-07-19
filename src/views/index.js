@@ -10,7 +10,11 @@ export default (props) => (
   <Provider store={store}>
     <Router history={history}>
       <App />
-      <BasicModal />
+      <BasicModal
+          type={'tronLink'}
+          title={'Please open your Tronlink'}
+          text={'Haven\'t installed Tronlink yet?'}
+      />
     </Router>
   </Provider>
 );

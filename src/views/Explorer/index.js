@@ -96,7 +96,7 @@ class Explorer extends Component {
     let column = null;
     let rightColDiv = null;
     let leftColDiv = null;
-    console.warn(this.state.bets);
+    // console.warn(this.state.bets);
 
     if (this.state.horizontally) {
       column = 'col-12 mt-4';
