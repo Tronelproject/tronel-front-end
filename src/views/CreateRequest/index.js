@@ -52,7 +52,7 @@ class CreateRequests extends Component {
     }
     if (this.state.betAmount.length >= 0) {
       this.checkError(
-        !parseFloat(this.state.betAmount),
+        !parseFloat(this.state.betAmount) || parseFloat(this.state.betAmount) < 10,
           'betAmount',
           'Please enter number',
       );
@@ -69,16 +69,16 @@ class CreateRequests extends Component {
     );
     if (this.state.specifiedDate && this.state.specifiedTime) {
       this.checkError(
-          msd < moment(),
+          msd < moment() + 10 * 60 * 1000,
           'specified',
-          'Specified date must be more than now',
+          'Specified date must be greater than now + 10 minutes',
       );
     }
     if (this.state.expirationDate && this.state.expirationTime) {
       this.checkError(
-          (med < moment()) || (med > msd),
+          (med < moment() + 10 * 60 * 1000) || (med > msd),
           'expiration',
-          'Expiration date must be more than now and lesser than specified date',
+          'Expiration date must be greater than now + 10 minutes and lesser than specified date',
       );
     }
   };
