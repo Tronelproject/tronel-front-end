@@ -16,7 +16,7 @@ async function loadAllStuff() {
     return;
   }
 
-  const sortedBet = bets.data.sort((a, b) => b.specifiedDate - a.specifiedDate);
+  const sortedBet = bets.data.slice().reverse();
 
   loadBets(sortedBet);
   loadMyBets(sortedBet);
