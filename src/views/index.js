@@ -5,6 +5,7 @@ import BasicModal from 'Root/shared/components/Modal';
 import history from 'Root/history';
 import store from 'Root/store';
 import App from './App';
+import LoadingModal from './LoadingModal';
 
 export default (props) => (
   <Provider store={store}>
@@ -15,6 +16,7 @@ export default (props) => (
           title={'Please open your Tronlink'}
           text={'Haven\'t installed Tronlink yet?'}
       />
+      <LoadingModal />
     </Router>
   </Provider>
 );

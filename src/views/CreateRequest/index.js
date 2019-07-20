@@ -55,7 +55,7 @@ class CreateRequests extends Component {
       this.checkError(
         !parseFloat(this.state.betAmount) || parseFloat(this.state.betAmount) < 10,
           'betAmount',
-          'Please enter number',
+          'Please enter number and greater than 10 TRX',
       );
     }
     this.checkError(
@@ -423,12 +423,6 @@ class CreateRequests extends Component {
               </div>
             </div>
           </div>
-          <BasicModal
-              warningStatus={this.state.warning}
-              type={'loading'}
-              title={'Don’t refresh or close the page'}
-              text={'please wait, your request is being processing, it may takes 1 minute'}
-          />
         </Fragment>
     );
   }
