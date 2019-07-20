@@ -56,9 +56,9 @@ class CreateRequests extends Component {
       this.checkError(
         !parseFloat(this.state.betAmount)
         || parseFloat(this.state.betAmount) < 10
-        || parseFloat(this.state.betAmount) < store.getState().user.balance / 1000000,
+        || parseFloat(this.state.betAmount) > store.getState().user.balance / 1000000,
           'betAmount',
-          'Please enter number and greater than 10 TRX',
+          'Please enter number and greater than 10 TRX and your account balance',
       );
     }
     this.checkError(
