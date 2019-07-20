@@ -12,6 +12,7 @@ import addBet from 'Root/actions/myrequests/add';
 import styles from './styles.less';
 import {RadioGroup, Radio} from 'react-radio-group';
 import history from 'Root/history';
+import store from 'Root/store';
 
 let validate = false;
 
@@ -53,7 +54,9 @@ class CreateRequests extends Component {
     }
     if (this.state.betAmount.length >= 0) {
       this.checkError(
-        !parseFloat(this.state.betAmount) || parseFloat(this.state.betAmount) < 10,
+        !parseFloat(this.state.betAmount)
+        || parseFloat(this.state.betAmount) < 10
+        || parseFloat(this.state.betAmount) < store.getState().user.balance / 1000000,
           'betAmount',
           'Please enter number and greater than 10 TRX',
       );
