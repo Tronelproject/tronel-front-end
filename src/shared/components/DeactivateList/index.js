@@ -39,8 +39,16 @@ class DeactivateList extends Component {
     }
   };
 
+  convertDate = (time) => {
+    return moment.utc(moment.unix(time)).format('YYYY/MM/DD');
+  };
+
+  convertTime = (time) => {
+    return moment.utc(moment.unix(time)).format('HH:mm');
+  };
+
   render() {
-    // console.warn('heeree', store.getState().user.balance / 1000000);
+    // console.warn();
     let newList = null;
     const trx = 1000000;
     const priceAmount = 10000;
@@ -127,12 +135,10 @@ class DeactivateList extends Component {
                mt-xl-0 mt-lg-0 mt-md-0 mt-sm-0 mt-3">
             <h6 className="info-list-text mb-0
             text-xl-right text-lg-right text-md-right text-sm-right text-left">
-               <span className="pr-2">{moment.unix(
-                   this.props.list.specifiedDate).
-                   format('YYYY/MM/DD')}</span>|
-              <span className="pl-2">{moment.unix(
-                  this.props.list.specifiedDate).
-                  format('HH:mm')}{' '}(UTC)</span>
+              <span className="pr-2">{this.convertDate(
+                  this.props.list.specifiedDate)}</span>|
+              <span className="pl-2">{this.convertTime(
+                  this.props.list.specifiedDate)}{' '}(UTC)</span>
             </h6>
           </div>
         </div>
@@ -148,12 +154,10 @@ class DeactivateList extends Component {
                mt-xl-0 mt-lg-0 mt-md-0 mt-sm-0 mt-3">
             <h6 className="info-list-text mb-0
             text-xl-right text-lg-right text-md-right text-sm-right text-left">
-               <span className="pr-2">{moment.unix(
-                   this.props.list.lockTime).
-                   format('YYYY/MM/DD')}</span>|
-              <span className="pl-2">{moment.unix(
-                  this.props.list.lockTime).
-                  format('HH:mm')}{' '}(UTC)</span>
+              <span className="pr-2">{this.convertDate(
+                  this.props.list.lockTime)}</span>|
+              <span className="pl-2">{this.convertTime(
+                  this.props.list.lockTime)}{' '}(UTC)</span>
             </h6>
           </div>
         </div>
@@ -296,10 +300,8 @@ class DeactivateList extends Component {
               </li>
             </ul>
             <p className="block-complete-info">
-              At the {moment.unix(this.props.list.specifiedDate).
-                format('YYYY/MM/DD')} |
-              {' '}{moment.unix(this.props.list.specifiedDate).
-                format('HH:mm')}{' '}(UTC)
+              At the {this.convertDate(this.props.list.specifiedDate)} |
+              {' '}{this.convertTime(this.props.list.specifiedDate)}{' '}(UTC)
               {' '}if the {this.props.list.currency} price is
               {' '}{predictText}{' '}
               ${this.props.list.predictionPrice / priceAmount},

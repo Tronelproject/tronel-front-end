@@ -141,6 +141,15 @@ class CreateRequests extends Component {
         hour: this.state.specifiedTime.hour(),
         minute: this.state.specifiedTime.minute(),
       });
+      let utc = moment.utc();
+      let oldTime = msd;
+      utc.second(oldTime.second());
+      utc.minute(oldTime.minute());
+      utc.hour(oldTime.hour());
+      utc.date(oldTime.date());
+      utc.month(oldTime.month());
+      utc.year(oldTime.year());
+      msd = utc;
     }
 
     let med = null;
@@ -150,11 +159,20 @@ class CreateRequests extends Component {
         hour: this.state.expirationTime.hour(),
         minute: this.state.expirationTime.minute(),
       });
+      let utc = moment.utc();
+      let oldTime = med;
+      utc.second(oldTime.second());
+      utc.minute(oldTime.minute());
+      utc.hour(oldTime.hour());
+      utc.date(oldTime.date());
+      utc.month(oldTime.month());
+      utc.year(oldTime.year());
+      med = utc;
     }
 
     this.handleErrors(msd, med);
     this.setState({}, async () => {
-      // console.warn(validate);
+      console.warn(validate);
       if (validate) {
         this.setState({warning: true});
         await addBet({
