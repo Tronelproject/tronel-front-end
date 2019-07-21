@@ -48,15 +48,16 @@ class CreateRequests extends Component {
   handleErrors = (msd, med) => {
     if (this.state.predictPrice.length >= 0) {
       this.checkError(
-        !parseFloat(this.state.predictPrice),
+          !parseFloat(this.state.predictPrice),
           'predictPrice',
           'Please enter number');
     }
     if (this.state.betAmount.length >= 0) {
       this.checkError(
-        !parseFloat(this.state.betAmount)
-        || parseFloat(this.state.betAmount) < 10
-        || parseFloat(this.state.betAmount) > store.getState().user.balance / 1000000,
+          !parseFloat(this.state.betAmount)
+          || parseFloat(this.state.betAmount) < 10
+          || parseFloat(this.state.betAmount) > store.getState().user.balance /
+          1000000,
           'betAmount',
           'Please enter number and greater than 10 TRX and your account balance',
       );
@@ -170,6 +171,8 @@ class CreateRequests extends Component {
   };
 
   render() {
+    const utcDate = moment.utc().format('YYYY-MM-DD');
+    const utcTime = moment.utc().format('HH:mm');
     const dateFormat = 'YYYY/MM/DD';
     const format = 'HH:mm';
     const menu = (
@@ -322,7 +325,9 @@ class CreateRequests extends Component {
                           <DatePicker
                               onChange={this.onChangeSpecifiedDate}
                               format={dateFormat}
-                              className={styles.time}/>
+                              className={styles.time}
+                              defaultPickerValue={moment(utcDate, 'YYYY-MM-DD')}
+                          />
                           {this.state.errors.specified.length > 0 &&
                           <small
                               className="form-text error-text">
@@ -339,6 +344,7 @@ class CreateRequests extends Component {
                               onChange={(time) => {
                                 this.setState({specifiedTime: time});
                               }}
+                              defaultOpenValue={moment(utcTime, 'HH:mm:ss')}
                           />
                         </div>
                       </div>
@@ -364,7 +370,9 @@ class CreateRequests extends Component {
                               disabled={this.state.selectedDateValue !==
                               'custom'}
                               format={dateFormat}
-                              className={styles.time}/>
+                              className={styles.time}
+                              defaultPickerValue={moment(utcDate, 'YYYY-MM-DD')}
+                          />
                           {this.state.errors.expiration.length > 0 &&
                           <small
                               className="form-text error-text">
@@ -383,6 +391,7 @@ class CreateRequests extends Component {
                               onChange={(time) => {
                                 this.setState({expirationTime: time});
                               }}
+                              defaultOpenValue={moment(utcTime, 'HH:mm:ss')}
                           />
                         </div>
                       </div>
