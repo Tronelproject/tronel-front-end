@@ -132,7 +132,7 @@ class DeactivateList extends Component {
                    format('YYYY/MM/DD')}</span>|
               <span className="pl-2">{moment.unix(
                   this.props.list.specifiedDate).
-                  format('HH:mm')}</span>
+                  format('HH:mm')}{' '}(UTC)</span>
             </h6>
           </div>
         </div>
@@ -153,7 +153,7 @@ class DeactivateList extends Component {
                    format('YYYY/MM/DD')}</span>|
               <span className="pl-2">{moment.unix(
                   this.props.list.lockTime).
-                  format('HH:mm')}</span>
+                  format('HH:mm')}{' '}(UTC)</span>
             </h6>
           </div>
         </div>
@@ -298,7 +298,8 @@ class DeactivateList extends Component {
             <p className="block-complete-info">
               At the {moment.unix(this.props.list.specifiedDate).
                 format('YYYY/MM/DD')} |
-              {' '}{moment.unix(this.props.list.specifiedDate).format('HH:mm')}
+              {' '}{moment.unix(this.props.list.specifiedDate).
+                format('HH:mm')}{' '}(UTC)
               {' '}if the {this.props.list.currency} price is
               {' '}{predictText}{' '}
               ${this.props.list.predictionPrice / priceAmount},

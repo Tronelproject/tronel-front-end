@@ -310,7 +310,7 @@ class CreateRequests extends Component {
                       {/*specified date*/}
                       <div className="row mt-4 pt-2">
                         <div className="col-12">
-                          <h6 className="block-title">Specified date</h6>
+                          <h6 className="block-title">Specified date (UTC)</h6>
                         </div>
                       </div>
                       <div
@@ -352,7 +352,7 @@ class CreateRequests extends Component {
                       <div className="row mt-4 pt-2">
                         <div
                             className="col-xl-6 col-lg-9 col-md-10 col-sm-12 col-12 radio-group-section">
-                          <h6 className="block-title">Expiration date:</h6>
+                          <h6 className="block-title">Expiration date (UTC)</h6>
                         </div>
                       </div>
                       {/*custom date*/}
