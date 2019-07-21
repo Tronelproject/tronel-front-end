@@ -20,6 +20,7 @@ export default async (url, options) => {
       data: json,
     };
   } catch (e) {
+    console.log('too fetch error', e);
     return null;
   }
 };

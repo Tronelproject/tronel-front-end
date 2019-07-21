@@ -28,6 +28,8 @@ export default async (details) => {
       type: types.loadingModal.HIDE,
     });
 
+    console.log('fuck that shit', e);
+
     return;
   }
 
@@ -41,6 +43,8 @@ export default async (details) => {
   if (!bet) {
     return;
   }
+
+  console.log('inja miad');
 
   store.dispatch({
     type: types.myrequests.ADD,
