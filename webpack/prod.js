@@ -22,7 +22,8 @@ module.exports = Object.assign({}, common, {
       'process.env': {
         'NODE_ENV': JSON.stringify('production'),
         'SERVER': JSON.stringify('https://api.tronel.io'),
-        'FACTORY': JSON.stringify('TC12yaNN9VSctf3e2pE3Kq6jKArMt2fS1q'),
+        // 'FACTORY': JSON.stringify('TC12yaNN9VSctf3e2pE3Kq6jKArMt2fS1q'),
+        'FACTORY': JSON.stringify('TWo4iMr794EwRR7FLwk9sDG8njxavLhtNX'),
       },
     }),
     new UglifyJsPlugin({
