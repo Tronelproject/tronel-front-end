@@ -74,16 +74,16 @@ class CreateRequests extends Component {
     );
     if (this.state.specifiedDate && this.state.specifiedTime) {
       this.checkError(
-          msd < moment() + 10 * 60 * 1000,
+          msd < moment() + 5 * 60 * 1000,
           'specified',
           'Specified date must be greater than now + 10 minutes',
       );
     }
     if (this.state.expirationDate && this.state.expirationTime) {
       this.checkError(
-          (med < moment() + 10 * 60 * 1000) || (med > msd),
+          (med < moment() + 5 * 60 * 1000) || (med > msd),
           'expiration',
-          'Expiration date must be greater than now + 10 minutes and lesser than specified date',
+          'Expiration date must be greater than now + 5 minutes and lesser than specified date',
       );
     }
   };
