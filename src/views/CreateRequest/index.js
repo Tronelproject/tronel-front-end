@@ -49,9 +49,11 @@ class CreateRequests extends Component {
     if (this.state.predictPrice.length >= 0) {
       this.checkError(
           !parseFloat(this.state.predictPrice)
-          || (this.state.predictPrice.split('.')[1] && this.state.predictPrice.split('.')[1].length > 4),
+          || (this.state.predictPrice.split('.')[1] && this.state.predictPrice.split('.')[1].length > 4)
+          || (this.state.predictPrice.includes('.') && this.state.predictPrice.length > 8)
+          || (!this.state.predictPrice.includes('.') && this.state.predictPrice.length > 7),
           'predictPrice',
-          'Please enter number (you can only enter 4 decimals)');
+          'Please enter number');
     }
     if (this.state.betAmount.length >= 0) {
       this.checkError(
