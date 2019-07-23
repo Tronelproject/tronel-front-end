@@ -152,8 +152,8 @@ class Explorer extends Component {
                         this.range(event);
                       }}
                              min={0}
-                             max={1000}
-                             defaultValue={[200, 500]}
+                             max={50000}
+                             defaultValue={[20000, 40000]}
                              railStyle={{background: '#b2b4b7'}}
                              className={styles.range}
                              tipFormatter={value => `${value} TRX`}
@@ -167,7 +167,7 @@ class Explorer extends Component {
                         <span
                             className="w-50 text-left rc-slider-min-max">0</span>
                         <span className="w-50 text-right rc-slider-min-max"
-                              style={{float: 'right'}}>1000</span>
+                              style={{float: 'right'}}>50k</span>
                      </span>
                     </div>
                   </div>
