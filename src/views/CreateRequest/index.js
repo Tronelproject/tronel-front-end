@@ -48,18 +48,18 @@ class CreateRequests extends Component {
   handleErrors = (msd, med) => {
     if (this.state.predictPrice.length >= 0) {
       this.checkError(
-          !parseFloat(this.state.predictPrice),
+          !parseFloat(this.state.predictPrice)
+          || (this.state.predictPrice.split('.')[1] && this.state.predictPrice.split('.')[1].length > 4),
           'predictPrice',
-          'Please enter number');
+          'Please enter number (you can only enter 4 decimals)');
     }
     if (this.state.betAmount.length >= 0) {
       this.checkError(
           !parseFloat(this.state.betAmount)
           || parseFloat(this.state.betAmount) < 10
-          || parseFloat(this.state.betAmount) > store.getState().user.balance /
-          1000000,
+          || parseFloat(this.state.betAmount) > store.getState().user.balance / 1000000,
           'betAmount',
-          'Please enter number and greater than 10 TRX and your account balance',
+          'Please enter number and greater than 10 TRX and lesser your account balance',
       );
     }
     this.checkError(
@@ -76,7 +76,7 @@ class CreateRequests extends Component {
       this.checkError(
           msd < moment() + 5 * 60 * 1000,
           'specified',
-          'Specified date must be greater than now + 10 minutes',
+          'Specified date must be greater than now + 5 minutes',
       );
     }
     if (this.state.expirationDate && this.state.expirationTime) {
